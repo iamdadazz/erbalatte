@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Area riservata · Erbalatte</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#509A48">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  body { background: #F4F7F3; font-size: 0.95rem; }
+  .app { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
+  .side {
+    position: sticky; top: 0; height: 100vh;
+    background: #fff; color: var(--ink-2); border-right: 1px solid var(--line);
+    padding: 22px 14px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .side .logo { display: flex; align-items: center; gap: 10px; padding: 4px 10px 22px; }
+  .side .logo img { height: 36px; }
+  .side .logo span { font-size: .72rem; font-weight: 600; padding: 3px 7px; border-radius: 6px; background: var(--mint-50); color: var(--green-600); }
+  .side button {
+    all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
+    display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px;
+    font-weight: 600; color: var(--ink-2);
+    transition: background-color .2s, color .2s;
+  }
+  .side button svg { width: 19px; height: 19px; flex: none; }
+  .side button:hover { background: var(--mint-50); color: var(--ink); }
+  .side button[aria-selected="true"] { background: var(--mint-50); color: var(--green-600); box-shadow: inset 3px 0 0 var(--green); }
+  .side button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .side .badge { margin-left: auto; font-size: .72rem; padding: 1px 7px; border-radius: 6px; background: var(--sun); color: var(--green-900); font-weight: 600; }
+  .side .foot { margin-top: auto; padding: 14px 10px 0; border-top: 1px solid var(--line); font-size: .82rem; }
+  .side .foot a { color: var(--green-600); }
+
+  .main { padding: 26px clamp(18px, 3vw, 40px) 60px; min-width: 0; }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 24px; }
+  .bar h1 { font-size: 1.9rem; font-weight: 300; letter-spacing: -0.01em; }
+  .bar .spacer { flex: 1; }
+  .status { display: inline-flex; align-items: center; gap: 8px; font-size: .84rem; padding: 7px 12px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); color: var(--ink-2); }
+  .status i { width: 8px; height: 8px; border-radius: 50%; background: var(--sun); }
+  .status.ok i { background: var(--leaf); }
+  .btn-sm { min-height: 40px; padding: .55rem 1.1rem; font-size: .9rem; }
+  .btn-quiet { --btn-bg: #fff; --btn-fg: var(--ink); box-shadow: inset 0 0 0 1px var(--line-strong); }
+  .btn-quiet:hover { box-shadow: inset 0 0 0 1px var(--enamel), 0 8px 18px -12px rgba(11,35,17,.4); }
+
+  .panel { background: #fff; border-radius: 16px; box-shadow: 0 1px 0 rgba(14,42,20,.04), inset 0 0 0 1px var(--line); }
+  .panel-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+  .panel-h h2 { font-size: 1.08rem; font-weight: 600; letter-spacing: 0; }
+  .panel-h p { margin: 2px 0 0; color: var(--ink-2); font-size: .86rem; }
+  .panel-b { padding: 18px 20px; }
+  .grid-2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; align-items: start; }
+  .stack-18 > * + * { margin-top: 18px; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+  .kpi { padding: 16px 18px; }
+  .kpi small { color: var(--ink-2); display: block; }
+  .kpi b { display: block; font-size: 1.9rem; font-weight: 300; font-variant-numeric: tabular-nums; margin-top: 4px; line-height: 1.1; }
+  .kpi .delta { font-size: .8rem; color: var(--enamel); font-weight: 650; }
+
+  table.t { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .t th { text-align: left; font-size: .76rem; font-weight: 600; color: var(--ink-2); padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .t td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .t tr:last-child td { border-bottom: 0; }
+  .t tbody tr:hover td { background: var(--leaf-50); }
+  .t .r { text-align: right; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 600; padding: 3px 8px; border-radius: 7px; white-space: nowrap; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .pill.paid { background: var(--leaf-100); color: var(--enamel); }
+  .pill.ship { background: #E8F0FB; color: #1F4E8C; }
+  .pill.new { background: #FFF5D6; color: #7A5A00; }
+  .dot-kind { display: inline-block; width: 9px; height: 9px; border-radius: 3px; background: var(--leaf); margin-right: 6px; }
+  .dot-kind.rosa { background: var(--rosa); }
+
+  .prod { display: grid; grid-template-columns: 64px 1fr auto; gap: 16px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+  .prod:last-child { border-bottom: 0; }
+  .prod .thumb { width: 64px; height: 64px; border-radius: 12px; background: var(--leaf-50); display: grid; place-items: center; overflow: hidden; }
+  .prod .thumb img { width: 92%; mix-blend-mode: multiply; }
+  .prod b { display: block; }
+  .prod small { color: var(--ink-2); }
+  .prod .ctrls { display: flex; align-items: center; gap: 16px; }
+  .num-in { display: inline-flex; align-items: center; border-radius: 10px; box-shadow: inset 0 0 0 1.5px var(--line-strong); background: #fff; }
+  .num-in button { width: 34px; height: 36px; border: 0; background: none; color: var(--enamel); font-size: 1.1rem; border-radius: 9px; }
+  .num-in button:hover { background: var(--leaf-50); }
+  .num-in input { width: 56px; height: 36px; border: 0; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; background: transparent; -moz-appearance: textfield; }
+  .num-in input::-webkit-outer-spin-button, .num-in input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .num-in input:focus { outline: none; }
+  .num-in:focus-within { box-shadow: inset 0 0 0 1.5px var(--enamel), 0 0 0 3px rgba(80,154,72,.2); }
+  .ctrl-l { font-size: .74rem; color: var(--ink-2); display: block; margin-bottom: 4px; font-weight: 650; }
+  .low-flag { font-size: .76rem; color: #7A5A00; background: #FFF5D6; padding: 2px 7px; border-radius: 6px; font-weight: 600; }
+  .switch { position: relative; display: inline-block; width: 44px; height: 26px; flex: none; vertical-align: middle; }
+  .switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+  .switch span { position: absolute; inset: 0; border-radius: 13px; background: #C9D3C9; transition: background-color .25s; }
+  .switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .3s var(--ease-out); }
+  .switch input:checked + span { background: var(--leaf); }
+  .switch input:checked + span::after { transform: translateX(18px); }
+  .switch input:focus-visible + span { outline: 3px solid var(--leaf); outline-offset: 2px; }
+
+  .price-in { display: inline-flex; align-items: center; gap: 4px; padding: 0 10px; height: 36px; border-radius: 10px; box-shadow: inset 0 0 0 1.5px var(--line-strong); background: #fff; }
+  .price-in:focus-within { box-shadow: inset 0 0 0 1.5px var(--enamel), 0 0 0 3px rgba(80,154,72,.2); }
+  .price-in input { width: 58px; border: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; background: transparent; }
+  .price-in input:focus { outline: none; }
+  .price-in span { color: var(--ink-2); font-size: .85rem; }
+  .price-in.bad { box-shadow: inset 0 0 0 1.5px var(--rosa); }
+  .changed td { background: #FFFBEA; }
+  .save-bar { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-top: 1px solid var(--line); background: var(--leaf-50); border-radius: 0 0 16px 16px; }
+  .save-bar .msg { font-size: .86rem; color: var(--ink-2); margin-right: auto; }
+
+  .preview-ladder { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; align-items: end; }
+  .preview-ladder div { border-radius: 8px; background: var(--leaf-100); padding: 6px; font-size: .74rem; font-variant-numeric: tabular-nums; display: flex; flex-direction: column; justify-content: flex-end; }
+  .preview-ladder b { font-size: 1.05rem; }
+
+  .empty-tab { text-align: center; padding: 70px 20px; color: var(--ink-2); }
+  .empty-tab svg { width: 56px; margin: 0 auto 16px; color: var(--leaf-300); }
+  .empty-tab b { display: block; color: var(--ink); font-size: 1.25rem; margin-bottom: 6px; }
+  .demo-banner { display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-radius: 12px; background: #FFF5D6; color: #5E4600; font-size: .86rem; margin-bottom: 18px; }
+  .demo-banner svg { width: 18px; flex: none; }
+
+  [role="tabpanel"][hidden] { display: none; }
+  .mobile-tabs { display: none; }
+
+  @media (max-width: 1100px) { .grid-2 { grid-template-columns: 1fr; } .kpis { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 820px) {
+    .app { grid-template-columns: 1fr; }
+    .side { position: static; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; gap: 4px; }
+    .side .logo, .side .foot { display: none; }
+    .side button { width: auto; white-space: nowrap; }
+    .side button svg { display: none; }
+    .prod { grid-template-columns: 52px 1fr; }
+    .prod .ctrls { grid-column: 1 / -1; justify-content: space-between; flex-wrap: wrap; }
+    .t-wrap { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" role="tablist" aria-label="Sezioni amministrazione" aria-orientation="vertical">
+    <div class="logo"><img src="assets/img/erbalatte.png" alt="erbalatte"><span>Admin</span></div>
+    <button role="tab" id="tab-home" aria-controls="p-home" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Panoramica</button>
+    <button role="tab" id="tab-orders" aria-controls="p-orders" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></svg>Ordini<span class="badge">3</span></button>
+    <button role="tab" id="tab-products" aria-controls="p-products" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h8v14H8zM8 7l1.5-3h5L16 7M11 2h2"/></svg>Prodotti e prezzi</button>
+    <button role="tab" id="tab-b2b" aria-controls="p-b2b" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16v12H4zM9 8V5h6v3M4 13h16"/></svg>Richieste B2B</button>
+    <button role="tab" id="tab-settings" aria-controls="p-settings" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Pagamenti e spedizioni</button>
+    <div class="foot">Mockup dell'area riservata.<br><a href="index.html">Torna al sito</a></div>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="demo-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5" stroke-linecap="round"/></svg><span>Anteprima: ordini e statistiche sono dati dimostrativi. Prezzi e disponibilità modificati qui si aggiornano davvero nel negozio di questo browser.</span></div>
+
+    <!-- ======== PRODUCTS & PRICES ======== -->
+    <section role="tabpanel" id="p-products" aria-labelledby="tab-products">
+      <div class="bar">
+        <h1>Prodotti e prezzi</h1>
+        <span class="spacer"></span>
+        <span class="status"><i></i>Stripe: da collegare (fase 2)</span>
+        <a class="btn btn-sm btn-quiet" href="negozio.html" target="_blank" rel="noopener">Apri il negozio</a>
+      </div>
+
+      <div class="grid-2">
+        <div class="stack-18">
+          <div class="panel">
+            <div class="panel-h"><div><h2>Disponibilità</h2><p>Casse da 12 L in magazzino. Sotto la soglia il negozio mostra "Ultime casse".</p></div></div>
+            <div data-products></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-h"><div><h2>Prezzi a scaglioni</h2><p>Valgono per entrambi i latti; lo scaglione si calcola sul totale delle casse nel carrello.</p></div></div>
+            <div class="t-wrap">
+              <table class="t">
+                <thead><tr><th>Casse</th><th>Litri</th><th>Prezzo al litro</th><th class="r">Totale ordine</th><th class="r">Risparmio</th></tr></thead>
+                <tbody data-tiers></tbody>
+              </table>
+            </div>
+            <div class="save-bar">
+              <span class="msg" data-save-msg>Nessuna modifica.</span>
+              <button class="btn btn-sm btn-quiet" type="button" data-reset>Ripristina prezzi attuali</button>
+              <button class="btn btn-sm" type="button" data-save disabled>Salva modifiche</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-h"><div><h2>Anteprima nel negozio</h2><p>Così il cliente vede gli scaglioni.</p></div></div>
+          <div class="panel-b">
+            <div class="preview-ladder" data-preview></div>
+            <p class="muted" style="font-size:.85rem;margin:14px 0 0">Il prezzo più basso appare anche in home ("da … €/L") e sul pulsante Ordina.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== OVERVIEW ======== -->
+    <section role="tabpanel" id="p-home" aria-labelledby="tab-home" hidden>
+      <div class="bar"><h1>Panoramica</h1><span class="spacer"></span><span class="status">Settembre 2026</span></div>
+      <div class="kpis">
+        <div class="panel kpi"><small>Ordini del mese</small><b>64</b><span class="delta">+12% su agosto</span></div>
+        <div class="panel kpi"><small>Litri venduti</small><b>3.456</b><span class="delta">+9% su agosto</span></div>
+        <div class="panel kpi"><small>Incasso</small><b>9.214 €</b><span class="delta">+11% su agosto</span></div>
+        <div class="panel kpi"><small>Casse in magazzino</small><b data-kpi-stock>141</b><span class="delta" style="color:var(--ink-2)">dato reale del catalogo</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><div><h2>Ultimi ordini</h2></div><button class="btn btn-sm btn-quiet" type="button" data-goto="tab-orders">Tutti gli ordini</button></div>
+        <div class="t-wrap"><table class="t" data-orders-mini></table></div>
+      </div>
+    </section>
+
+    <!-- ======== ORDERS ======== -->
+    <section role="tabpanel" id="p-orders" aria-labelledby="tab-orders" hidden>
+      <div class="bar"><h1>Ordini</h1><span class="spacer"></span><button class="btn btn-sm btn-quiet" type="button">Esporta CSV</button></div>
+      <div class="panel"><div class="t-wrap"><table class="t" data-orders></table></div></div>
+    </section>
+
+    <!-- ======== B2B ======== -->
+    <section role="tabpanel" id="p-b2b" aria-labelledby="tab-b2b" hidden>
+      <div class="bar"><h1>Richieste B2B</h1></div>
+      <div class="panel">
+        <div class="t-wrap"><table class="t">
+          <thead><tr><th>Data</th><th>Attività</th><th>Tipo</th><th>Città</th><th>Volume/settimana</th><th>Stato</th></tr></thead>
+          <tbody>
+            <tr><td>22/09</td><td><b>Caffè del Borgo</b></td><td>Bar</td><td>Savigliano</td><td>50–150 L</td><td><span class="pill new">Da chiamare</span></td></tr>
+            <tr><td>19/09</td><td><b>Gelateria La Neve</b></td><td>Gelateria</td><td>Cuneo</td><td>150–400 L</td><td><span class="pill ship">Preventivo inviato</span></td></tr>
+            <tr><td>12/09</td><td><b>Forno Antico</b></td><td>Panificio</td><td>Fossano</td><td>Meno di 50 L</td><td><span class="pill paid">Cliente attivo</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ======== SETTINGS ======== -->
+    <section role="tabpanel" id="p-settings" aria-labelledby="tab-settings" hidden>
+      <div class="bar"><h1>Pagamenti e spedizioni</h1></div>
+      <div class="panel">
+        <div class="empty-tab">
+          <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="14" width="44" height="30" rx="5"/><path d="M6 23h44M14 35h10"/></svg>
+          <b>Stripe arriva nella fase 2</b>
+          Qui collegherai l'account Stripe (carte, Apple Pay, Google Pay), le email di conferma e le impostazioni del corriere.
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script type="module">
+  import { getCatalog, saveCatalog, resetCatalog, DEFAULT_CATALOG, eur, eurL } from './assets/js/store.js';
+
+  /* ---------- tabs ---------- */
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  function select(tab) {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      if (!['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+      e.preventDefault();
+      const n = tabs[(i + (e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      n.focus(); select(n);
+    });
+  });
+  document.querySelectorAll('[data-goto]').forEach((b) => b.addEventListener('click', () => select(document.getElementById(b.dataset.goto))));
+  select(document.getElementById('tab-products'));
+
+  /* ---------- catalogue editing ---------- */
+  let draft = structuredClone(getCatalog());
+  const LOW = 20;
+
+  function dirty() { return JSON.stringify(draft) !== JSON.stringify(getCatalog()); }
+  function refreshSave() {
+    const d = dirty();
+    const bad = draft.tiers.some((t) => !(t.perLitre > 0));
+    document.querySelector('[data-save]').disabled = !d || bad;
+    document.querySelector('[data-save-msg]').textContent = bad ? 'Controlla i prezzi: devono essere maggiori di zero.' : d ? 'Modifiche non salvate.' : 'Nessuna modifica.';
+  }
+
+  function renderProducts() {
+    document.querySelector('[data-products]').innerHTML = Object.values(draft.products).map((p) => `
+      <div class="prod">
+        <div class="thumb" style="${p.tone === 'rosa' ? 'background:var(--rosa-100)' : ''}"><img src="${p.img}" alt=""></div>
+        <div><b><span class="dot-kind ${p.tone === 'rosa' ? 'rosa' : ''}"></span>${p.name}</b><small>${p.active ? (p.stock <= 0 ? 'Esaurito nel negozio' : 'In vendita') : 'Nascosto dal negozio'}</small> ${p.active && p.stock > 0 && p.stock < LOW ? '<span class="low-flag">Scorta bassa</span>' : ''}</div>
+        <div class="ctrls">
+          <div><span class="ctrl-l" id="s-${p.id}">Casse disponibili</span>
+            <div class="num-in" role="group" aria-labelledby="s-${p.id}">
+              <button type="button" data-stock-dec="${p.id}" aria-label="Diminuisci">−</button>
+              <input type="number" min="0" step="1" value="${p.stock}" data-stock="${p.id}" aria-labelledby="s-${p.id}">
+              <button type="button" data-stock-inc="${p.id}" aria-label="Aumenta">+</button>
+            </div>
+          </div>
+          <div><span class="ctrl-l" id="a-${p.id}">In vendita</span><label class="switch"><input type="checkbox" ${p.active ? 'checked' : ''} data-active="${p.id}" aria-labelledby="a-${p.id}"><span></span></label></div>
+        </div>
+      </div>`).join('');
+    document.querySelector('[data-kpi-stock]').textContent = Object.values(draft.products).reduce((s, p) => s + p.stock, 0);
+  }
+
+  function renderTiers() {
+    const saved = getCatalog();
+    const base = draft.tiers[0].perLitre;
+    document.querySelector('[data-tiers]').innerHTML = draft.tiers.map((t, i) => {
+      const L = t.cases * draft.litresPerCase;
+      const changed = saved.tiers[i] && saved.tiers[i].perLitre !== t.perLitre;
+      return `<tr class="${changed ? 'changed' : ''}">
+        <td><b>${t.cases}</b></td><td>${L} L</td>
+        <td><span class="price-in ${t.perLitre > 0 ? '' : 'bad'}"><input type="number" inputmode="decimal" step="0.01" min="0.01" value="${t.perLitre.toFixed(2)}" data-tier="${i}" aria-label="Prezzo al litro per ${t.cases} ${t.cases === 1 ? 'cassa' : 'casse'}"><span>€/L</span></span></td>
+        <td class="r"><b>${eur(L * t.perLitre)}</b></td>
+        <td class="r">${i === 0 ? '—' : eur(L * (base - t.perLitre))}</td>
+      </tr>`;
+    }).join('');
+    document.querySelector('[data-preview]').innerHTML = draft.tiers.map((t, i) => `<div style="min-height:${54 + i * 9}px"><b>${t.cases}</b>${eurL(t.perLitre).replace('€/L', '€')}</div>`).join('');
+  }
+
+  function renderAll() { renderProducts(); renderTiers(); refreshSave(); }
+
+  document.addEventListener('input', (e) => {
+    if (e.target.dataset.tier) {
+      const v = parseFloat(String(e.target.value).replace(',', '.'));
+      draft.tiers[+e.target.dataset.tier].perLitre = isFinite(v) ? Math.round(v * 100) / 100 : 0;
+      // update totals without stealing focus
+      const pos = e.target.dataset.tier;
+      renderTiers();
+      const inp = document.querySelector(`[data-tier="${pos}"]`);
+      inp.focus(); inp.value = e.target.value;
+      refreshSave();
+    } else if (e.target.dataset.stock) {
+      draft.products[e.target.dataset.stock].stock = Math.max(0, parseInt(e.target.value || '0', 10));
+      refreshSave();
+    }
+  });
+  document.addEventListener('change', (e) => {
+    if (e.target.dataset.active) { draft.products[e.target.dataset.active].active = e.target.checked; renderProducts(); refreshSave(); }
+    if (e.target.dataset.stock) renderProducts();
+  });
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    const id = b.dataset.stockInc || b.dataset.stockDec;
+    if (id) {
+      draft.products[id].stock = Math.max(0, draft.products[id].stock + (b.dataset.stockInc ? 1 : -1));
+      renderProducts(); refreshSave();
+      document.querySelector(`[data-stock-${b.dataset.stockInc ? 'inc' : 'dec'}="${id}"]`).focus();
+    }
+  });
+  document.querySelector('[data-save]').addEventListener('click', () => {
+    saveCatalog(structuredClone(draft));
+    renderAll();
+    document.querySelector('[data-save-msg]').textContent = 'Salvato. Il negozio mostra già i nuovi valori.';
+  });
+  document.querySelector('[data-reset]').addEventListener('click', () => {
+    draft = structuredClone(DEFAULT_CATALOG);
+    resetCatalog();
+    renderAll();
+    document.querySelector('[data-save-msg]').textContent = 'Prezzi e disponibilità riportati ai valori del negozio attuale.';
+  });
+  renderAll();
+
+  /* ---------- demo orders ---------- */
+  const orders = [
+    ['#1284', '23/09', 'Giulia M.', 'Torino', 'intero', 2, 'new'], ['#1283', '22/09', 'Marco R.', 'Milano', 'scremato', 1, 'paid'],
+    ['#1282', '22/09', 'Elena B.', 'Cuneo', 'intero', 6, 'ship'], ['#1281', '21/09', 'Paolo T.', 'Genova', 'intero', 3, 'ship'],
+    ['#1280', '20/09', 'Sara L.', 'Asti', 'scremato', 4, 'ship'], ['#1279', '19/09', 'Andrea F.', 'Bologna', 'intero', 1, 'ship'],
+  ];
+  const statusTxt = { new: 'Nuovo', paid: 'Pagato', ship: 'Spedito' };
+  const cat = getCatalog();
+  const row = (o) => {
+    const t = [...cat.tiers].reverse().find((x) => o[5] >= x.cases) || cat.tiers[0];
+    return `<tr><td><b>${o[0]}</b></td><td>${o[1]}</td><td>${o[2]}</td><td>${o[3]}</td><td><span class="dot-kind ${o[4] === 'scremato' ? 'rosa' : ''}"></span>${o[4] === 'intero' ? 'Intero' : 'Parz. scremato'} × ${o[5]}</td><td class="r">${eur(o[5] * 12 * t.perLitre)}</td><td><span class="pill ${o[6]}">${statusTxt[o[6]]}</span></td></tr>`;
+  };
+  const head = '<thead><tr><th>Ordine</th><th>Data</th><th>Cliente</th><th>Città</th><th>Prodotto</th><th class="r">Totale</th><th>Stato</th></tr></thead>';
+  document.querySelector('[data-orders]').innerHTML = head + '<tbody>' + orders.map(row).join('') + '</tbody>';
+  document.querySelector('[data-orders-mini]').innerHTML = head + '<tbody>' + orders.slice(0, 4).map(row).join('') + '</tbody>';
+</script>
+</body>
+</html>

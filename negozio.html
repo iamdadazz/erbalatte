@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Negozio · Erbalatte</title>
+<meta name="description" content="Ordina Erbalatte Intero e Parzialmente Scremato UHT in casse da 12 litri. Da 2,48 €/L, spedizione gratuita in tutta Italia.">
+<meta name="theme-color" content="#509A48">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/shop.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head>
+<body>
+<script src="assets/js/chrome.js" data-part="header" data-page="negozio"></script>
+
+<main id="main">
+  <section class="shop-top" aria-labelledby="p-title">
+    <div class="config" data-config data-tone="green">
+      <div class="config-stage sign sign--leaf" data-carton>
+        <canvas role="img" aria-label="Confezione 3D di Erbalatte da 1 litro: trascina per girarla"></canvas>
+        <img class="fallback" data-fallback src="assets/img/Latte-intero-Agricoltura-simbiotica-Erbalatte-Fronte.webp" alt="">
+        <div class="stage-caption">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M18 3v4h-4M6 21v-4h4"/></svg>Trascina per girare la confezione</span>
+          <span class="num">1 L · a lunga conservazione</span>
+        </div>
+        <div class="stage-ui" role="group" aria-label="Lato della confezione">
+          <button type="button" class="chip" data-face="front" aria-pressed="true">Fronte</button>
+          <button type="button" class="chip" data-face="back" aria-pressed="false">Retro e valori</button>
+        </div>
+      </div>
+
+      <div class="config-panel sign sign--milk sign--plain">
+        <nav class="crumbs-dark" aria-label="Percorso"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Negozio</span></nav>
+        <div class="seg" role="group" aria-label="Scegli il latte">
+          <button type="button" data-kind="intero" aria-pressed="true"><span class="sw"></span>Intero</button>
+          <button type="button" data-kind="scremato" aria-pressed="false"><span class="sw"></span>Parz. scremato</button>
+        </div>
+        <h1 id="p-title" data-p-name>Latte Intero UHT</h1>
+        <p class="lead" data-p-blurb>Il gusto pieno e dolce del latte di una volta. Ideale al naturale, nel cappuccino e in cucina.</p>
+
+        <div class="ladder-label"><b id="ladder-t">Quante casse?</b><small>1 cassa = 12 confezioni da 1 L</small></div>
+        <fieldset class="ladder" data-ladder aria-labelledby="ladder-t"></fieldset>
+
+        <div class="buy">
+          <div class="sum"><b data-total>35,88 €</b><small data-total-note>12 litri · 2,99 €/L · spedizione gratuita</small></div>
+          <button type="button" class="btn" data-add>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h2l2.2 10.2a1.5 1.5 0 001.5 1.2h7.9a1.5 1.5 0 001.5-1.1L20.5 8.5H7"/><path d="M13 3v6M10 6h6"/></svg>
+            Aggiungi al carrello
+          </button>
+        </div>
+        <p class="stock" data-stock>Disponibile</p>
+
+        <ul class="trust">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span><b>Spedizione gratuita</b>Corriere espresso, tutta Italia</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 018 0v3"/></svg><span><b>Pagamento sicuro</b>Carta, Apple Pay, Google Pay</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-7-6.5-7-10.5A7 7 0 0112 3.5a7 7 0 017 7C19 14.5 16 18 12 21z"/><path d="M9 11.5l2 2 4-4"/></svg><span><b>Certificato</b>Agricoltura Simbiotica, CCPB</span></li>
+        </ul>
+
+        <div class="acc">
+          <details open>
+            <summary>Descrizione</summary>
+            <div class="acc-body" data-p-desc>
+              <p>Erbalatte da Agricoltura Simbiotica de La Corte: il primo latte certificato da Agricoltura Simbiotica, dal sapore autentico e genuino.</p>
+              <p style="margin:0">Le nostre frisone mangiano foraggio, fieni autoprodotti da prati polifiti e cereali coltivati in azienda. Senza concimi chimici, fitofarmaci e pesticidi sui prati, no OGM, no insilati di mais.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Valori nutrizionali medi per 100 ml</summary>
+            <div class="acc-body" data-p-nutri></div>
+          </details>
+          <details>
+            <summary>Conservazione</summary>
+            <div class="acc-body"><p style="margin:0">A lunga conservazione: tienilo in dispensa fino all'apertura. Dopo l'apertura conservare in frigorifero a +4 °C e consumare entro 3-4 giorni.</p></div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="g-title">
+    <div class="wrap">
+      <div class="head">
+        <div><h2 id="g-title">Dal prato alla dispensa.</h2></div>
+      </div>
+      <div class="gallery">
+        <figure><img src="assets/img/strip1.jpg" alt="Una confezione di Erbalatte Intero in un secchiello con fieno, a una fiera" loading="lazy"><figcaption>Erbalatte in fiera</figcaption></figure>
+        <figure><img src="assets/img/Latte-intero-Agricoltura-simbiotica-Erbalatte.webp" alt="Confezione di Erbalatte Intero, fronte e lato" loading="lazy"><figcaption>Intero UHT</figcaption></figure>
+        <figure><img src="assets/img/Latte-parzialmente-scremato-Agricoltura-simbiotica-Erbalatte.webp" alt="Confezione di Erbalatte Parzialmente Scremato, fronte e lato" loading="lazy"><figcaption>Parzialmente scremato UHT</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="section" style="padding-top:0" aria-labelledby="faq-title">
+    <div class="wrap faq-grid">
+      <div>
+        <h2 id="faq-title">Domande frequenti.</h2>
+        <p class="lede muted" style="margin-top:18px">Non trovi la risposta? Chiamaci al <a href="tel:+393426695924">342 669 5924</a> o scrivi a <a href="mailto:info@erbalatte.it">info@erbalatte.it</a>.</p>
+        <p class="placeholder-note">Testi FAQ da confermare con l'azienda</p>
+      </div>
+      <div class="acc" style="margin-top:0">
+        <details><summary>Quanto costa la spedizione?</summary><div class="acc-body"><p style="margin:0">Niente: la spedizione con corriere espresso è gratuita in tutta Italia, per qualsiasi numero di casse.</p></div></details>
+        <details><summary>Posso mischiare Intero e Parzialmente scremato?</summary><div class="acc-body"><p style="margin:0">Sì. Lo sconto al litro si calcola sul totale delle casse nel carrello: 2 casse di Intero e 2 di Parzialmente scremato valgono come 4 casse.</p></div></details>
+        <details><summary>Quanto dura il latte UHT?</summary><div class="acc-body"><p style="margin:0">È a lunga conservazione: trovi la data di scadenza su ogni confezione. Una volta aperto, tienilo in frigo e consumalo entro 3-4 giorni.</p></div></details>
+        <details><summary>Siete un bar, una gelateria o un ristorante?</summary><div class="acc-body"><p style="margin:0">Per forniture continuative abbiamo condizioni dedicate. <a href="professionisti.html">Richiedi un preventivo</a>.</p></div></details>
+        <details><summary>Cos'è l'Agricoltura Simbiotica?</summary><div class="acc-body"><p style="margin:0">Un metodo di coltivazione e cura del suolo che valorizza il legame tra suolo, animali e uomo, grazie ai funghi micorrizici. <a href="storia.html">Scopri il metodo</a>.</p></div></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/chrome.js" data-part="footer"></script>
+
+<script type="module">
+  import { getCatalog, eur, eurL, tierFor, addToCart } from './assets/js/store.js';
+  import { initCarton } from './assets/js/carton3d.js';
+
+  const NUTRI = [['Energia', '278 kJ / 67 kcal'], ['Grassi', '3,8 g'], ['di cui acidi grassi saturi', '2,2 g'], ['Carboidrati', '4,8 g'], ['di cui zuccheri', '4,8 g'], ['Proteine', '3,3 g'], ['Sale', '0,12 g'], ['Calcio', '120 mg (15% VNR)']];
+  const cfg = document.querySelector('[data-config]');
+  const ladder = document.querySelector('[data-ladder]');
+  let kind = location.hash === '#scremato' ? 'scremato' : 'intero';
+  let cases = 1;
+
+  const carton = initCarton(document.querySelector('[data-carton]'), kind);
+
+  function renderLadder() {
+    const cat = getCatalog();
+    const base = cat.tiers[0].perLitre;
+    ladder.innerHTML = cat.tiers.map((t, i) => {
+      const litres = t.cases * cat.litresPerCase;
+      const save = +(litres * (base - t.perLitre)).toFixed(2);
+      return `<label class="step ${t.cases === cases ? 'is-on' : ''}" style="--i:${i}">
+        <input type="radio" name="cases" value="${t.cases}" ${t.cases === cases ? 'checked' : ''} aria-label="${t.cases} ${t.cases === 1 ? 'cassa' : 'casse'}, ${litres} litri, ${eurL(t.perLitre)}">
+        ${save > 0 ? `<span class="save">−${eur(save).replace(/\s?€/, '')} €</span>` : ''}
+        <span class="n">${t.cases}</span>
+        <span class="u">${t.cases === 1 ? 'cassa' : 'casse'} · ${litres} L</span>
+        <span class="pl">${eurL(t.perLitre).replace(' €/L', ' €')}<span class="u">/L</span></span>
+      </label>`;
+    }).join('');
+  }
+
+  function renderProduct() {
+    const cat = getCatalog();
+    const p = cat.products[kind];
+    cfg.dataset.tone = p.tone === 'rosa' ? 'rosa' : 'green';
+    document.querySelectorAll('.seg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.kind === kind)));
+    document.querySelector('[data-p-name]').textContent = p.name;
+    document.querySelector('[data-p-blurb]').textContent = p.blurb;
+    document.querySelector('[data-fallback]').src = p.img;
+    document.querySelector('[data-p-nutri]').innerHTML = kind === 'intero'
+      ? `<table class="nutri"><tbody>${NUTRI.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</tbody></table><p style="margin:10px 0 0;font-size:.85rem">Valori riportati sulla confezione.</p>`
+      : '<p class="placeholder-note" style="margin:0">Valori da inserire dalla confezione del Parzialmente scremato</p>';
+    const stock = document.querySelector('[data-stock]');
+    const addBtn = document.querySelector('[data-add]');
+    if (!p.active || p.stock <= 0) {
+      stock.className = 'stock out'; stock.textContent = 'Momentaneamente esaurito';
+      addBtn.disabled = true;
+    } else {
+      addBtn.disabled = false;
+      stock.className = 'stock' + (p.stock < 20 ? ' low' : '');
+      stock.textContent = p.stock < 20 ? `Ultime ${p.stock} casse disponibili` : 'Disponibile · pronto per la spedizione';
+    }
+    renderTotal();
+  }
+
+  function renderTotal() {
+    const cat = getCatalog();
+    const t = tierFor(cases, cat);
+    const litres = cases * cat.litresPerCase;
+    document.querySelector('[data-total]').textContent = eur(litres * t.perLitre);
+    document.querySelector('[data-total-note]').textContent = `${litres} litri · ${eurL(t.perLitre)} · spedizione gratuita`;
+    ladder.querySelectorAll('.step').forEach((s) => s.classList.toggle('is-on', +s.querySelector('input').value === cases));
+  }
+
+  ladder.addEventListener('change', (e) => { cases = +e.target.value; renderTotal(); });
+  document.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => {
+    if (b.dataset.kind === kind) return;
+    kind = b.dataset.kind;
+    history.replaceState(null, '', '#' + kind);
+    carton.set(kind);
+    renderProduct();
+  }));
+  document.querySelectorAll('[data-face]').forEach((b) => b.addEventListener('click', () => {
+    carton.face(b.dataset.face);
+    document.querySelectorAll('[data-face]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  }));
+  document.querySelector('[data-add]').addEventListener('click', () => addToCart(kind, cases));
+  window.addEventListener('storage', () => { renderLadder(); renderProduct(); });
+
+  renderLadder();
+  renderProduct();
+</script>
+</body>
+</html>

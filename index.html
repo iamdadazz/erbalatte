@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Erbalatte · Latte da Agricoltura Simbiotica</title>
+<meta name="description" content="Erbalatte è il primo latte certificato da Agricoltura Simbiotica. Sano, dolce e digeribile, con più proteine e più vitamine. Spedizione gratuita in tutta Italia.">
+<meta name="theme-color" content="#509A48">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head>
+<body>
+<!--
+THESIS: the original erbalatte.it, clean and white with the brand's leaf green, refined; the wow is motion (a cute 3D cow on her meadow here, a scroll-driven 3D story on storia.html), never a dark or heavy surface.
+OWN-WORLD: white ground, brand greens #509A48 / #8FBC8B / #BADDB6 with #3F8438 for AA text, Poppins light headlines with semibold green emphasis, pill buttons, soft 28px cards, drifting leaves from the original bottle illustration; carton red only for the semi-skimmed milk.
+STORY: sweet, healthy, digestible milk with more protein and vitamins → why it is called Erbalatte → the soil-to-carton journey → two milks → chosen by professionals → free shipping.
+FIRST VIEWPORT: left, "Sano, dolce e digeribile." light 4.9rem with Ordina + La nostra storia and the +19/+27/+25 row; right, the toon cow grazing on a round meadow inside a pale mint halo, two floating info bubbles.
+FORM: brief-pinned (client's original site, refined); v1 seed 1438bd3d superseded by user feedback.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
+<script src="assets/js/chrome.js" data-part="header" data-page="home"></script>
+
+<main id="main">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="leaves" data-leaves="14" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="tag reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V11M12 11c-4 0-7-3-7-7 4 0 7 3 7 7zM12 13c3 0 6-2.5 6-6-3.5 0-6 2.5-6 6z"/></svg>Il primo latte da Agricoltura Simbiotica</span>
+        <h1 id="hero-title" class="display reveal" style="--delay:.08s">Sano, dolce e <strong>digeribile.</strong></h1>
+        <p class="lede reveal" style="--delay:.16s">Con più proteine e più vitamine. Le nostre frisone mangiano l'erba e i fieni dei nostri prati, coltivati senza concimi chimici né pesticidi.</p>
+        <div class="hero-actions reveal" style="--delay:.24s">
+          <a class="btn" href="negozio.html">Ordina Erbalatte <span class="price-tag" data-low>da 2,48 €/L</span></a>
+          <a class="btn btn--ghost" href="storia.html">La nostra storia</a>
+        </div>
+        <div class="hero-stats reveal" style="--delay:.32s" aria-label="Rispetto al latte convenzionale">
+          <div><b data-count="19">+19<sup>%</sup></b><span>proteine</span></div>
+          <div><b data-count="27">+27<sup>%</sup></b><span>vitamina A</span></div>
+          <div><b data-count="25">+25<sup>%</sup></b><span>vitamina E</span></div>
+        </div>
+      </div>
+      <div class="hero-stage" data-hero-stage>
+        <canvas role="img" aria-label="Illustrazione 3D: una simpatica frisona pascola su un prato fiorito, tra le api"></canvas>
+        <img class="fallback" src="assets/img/bottle.png" alt="Bottiglia di Erbalatte tra foglie e spighe">
+        <div class="bubble bubble--a"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-7-6.5-7-10.5A7 7 0 0112 3.5a7 7 0 017 7C19 14.5 16 18 12 21z"/><path d="M9 11l2 2 4-4"/></svg></span><span><b>Solo erba e fieno</b>no OGM, no insilati</span></div>
+        <div class="bubble bubble--b"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 100-16M12 16a4 4 0 100-8"/><circle cx="12" cy="12" r="1"/></svg></span><span><b>Mucche serene</b>monitorate ogni giorno</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="latte" class="section" style="padding-top:clamp(40px,6vw,80px)" aria-labelledby="why-title">
+    <div class="wrap split">
+      <div class="photo reveal"><img src="assets/img/strip2.jpg" alt="Prato polifita dell'azienda, con l'erba alta e le colline sullo sfondo" loading="lazy"><span class="chip">I nostri prati polifiti, Monasterolo di Savigliano</span></div>
+      <div>
+        <h2 id="why-title" class="reveal">Si chiama Erbalatte <strong>perché</strong></h2>
+        <p class="lede reveal">Le nostre mucche si nutrono di erba, fieni e cereali prodotti in azienda, senza concimi chimici, fitofarmaci e pesticidi sui prati.</p>
+        <p class="muted reveal">Il risultato si sente: un latte delicato, dolce e profumato. E si misura: le analisi delle Università di Torino e di Pisa hanno trovato più proteine, più vitamina A e più vitamina E.</p>
+        <ul class="checks reveal">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>Il primo latte certificato da Agricoltura Simbiotica</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>No OGM, no insilati di mais</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>Sesta generazione di allevatori, dal 2016 con l'Università di Torino</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0" aria-labelledby="journey-title">
+    <div class="wrap">
+      <div class="head reveal">
+        <div>
+          <h2 id="journey-title">Dal prato <strong>al tuo bicchiere</strong></h2>
+          <p class="lede">Segui il viaggio del nostro latte in 3D: dall'erba che cresce fino alla confezione che arriva a casa tua.</p>
+        </div>
+        <a class="link-arrow" href="storia.html">Guarda la storia <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="journey">
+        <a class="reveal" href="storia.html#c0"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c1-6 0-10-2-12M9 20c0-7 1-11 4-14M15 20c0-5-1-8-4-11M20 20c-1-5 0-9 2-11M2 20h20"/></svg></span><b>Il prato</b><small>Prati polifiti vivi, e le api tornano</small></a>
+        <a class="reveal" style="--delay:.06s" href="storia.html#c1"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10c0-3 3-5 7-5s7 2 7 5v3a5 5 0 01-5 5h-4a5 5 0 01-5-5z"/><path d="M5 9L2.5 7M19 9l2.5-2M9.5 11h.01M14.5 11h.01M10 15c1 .8 3 .8 4 0"/></svg></span><b>La colazione</b><small>Erba, fieno e cereali dell'azienda</small></a>
+        <a class="reveal" style="--delay:.12s" href="storia.html#c2"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></svg></span><b>La cura</b><small>Un sensore ci dice come stanno</small></a>
+        <a class="reveal" style="--delay:.18s" href="storia.html#c3"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8M9 3v3l-3 4v10h12V10l-3-4V3M6 13h12"/></svg></span><b>La mungitura</b><small>Il latte fresco, in stalla</small></a>
+        <a class="reveal" style="--delay:.24s" href="storia.html#c4"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18M5 17v3M19 17v3M7 17V9h4v8M13 17v-6h4v6M9 9V6"/></svg></span><b>Il confezionamento</b><small>A lunga conservazione</small></a>
+        <a class="reveal" style="--delay:.3s" href="storia.html#c5"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h8v14H8zM8 7l1.5-3h5L16 7M11 2h2"/><path d="M11 12c.8-1.5 2.2-1.5 3 0M12.5 13v3"/></svg></span><b>A casa tua</b><small>Spedizione gratuita in tutta Italia</small></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0" aria-labelledby="shop-title">
+    <div class="wrap">
+      <div class="head reveal">
+        <div>
+          <h2 id="shop-title">Scegli <strong>il tuo</strong> Erbalatte</h2>
+          <p class="lede">In casse da 12 litri, a lunga conservazione. Più casse ordini, meno paghi al litro.</p>
+        </div>
+        <a class="link-arrow" href="negozio.html">Vai al negozio <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="products">
+        <a class="product reveal" href="negozio.html#intero">
+          <div class="shot"><img src="assets/img/Latte-intero-Agricoltura-simbiotica-Erbalatte-Fronte.webp" alt="Confezione da 1 litro di Erbalatte Intero UHT" loading="lazy" width="1036" height="1036"></div>
+          <div class="body">
+            <span class="kind">Intero</span>
+            <h3>Latte Intero UHT</h3>
+            <p class="muted" style="margin:0">Il gusto pieno e dolce del latte di una volta.</p>
+            <div class="from"><span class="num" data-low>da 2,48 €/L</span><small>cassa da 12 L · spedizione gratuita</small></div>
+          </div>
+        </a>
+        <a class="product product--rosa reveal" style="--delay:.08s" href="negozio.html#scremato">
+          <div class="shot"><img src="assets/img/Latte-parzialmente-scremato-Agricoltura-simbiotica-Erbalatte-Fronte.webp" alt="Confezione da 1 litro di Erbalatte Parzialmente Scremato UHT" loading="lazy" width="1036" height="1036"></div>
+          <div class="body">
+            <span class="kind">Parzialmente scremato</span>
+            <h3>Latte Parzialmente Scremato UHT</h3>
+            <p class="muted" style="margin:0">Più leggero, stesso profumo di prato.</p>
+            <div class="from"><span class="num" data-low>da 2,48 €/L</span><small>cassa da 12 L · spedizione gratuita</small></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0" aria-labelledby="q-title">
+    <div class="wrap center quotes">
+      <h2 id="q-title" class="reveal" style="margin-bottom:clamp(32px,4vw,52px)">Scelto da <strong>chi il latte lo lavora</strong></h2>
+      <div class="quote-track reveal" data-quotes aria-live="polite">
+        <figure class="quote-item is-on" style="margin:0"><q>La dolcezza del latte, rotonda e morbida, è quella del latte di una volta, che riportiamo nei nostri gelati.</q><figcaption class="who"><span class="badge">Gelateria</span><span><b>PAMA</b><small>Novara</small></span></figcaption></figure>
+        <figure class="quote-item" style="margin:0"><q>Dei nostri cappuccini noterete la crema: deliziosa, soffice e montata alla perfezione.</q><figcaption class="who"><span class="badge">Bar</span><span><b>100 Vini e Affini</b><small>Torino</small></span></figcaption></figure>
+        <figure class="quote-item" style="margin:0"><q>Erbalatte è diventato per noi il latte principale, perché non riusciamo ad usarne altro.</q><figcaption class="who"><span class="badge">Panificio</span><span><b>Perino Vesco</b><small>Torino</small></span></figcaption></figure>
+        <figure class="quote-item" style="margin:0"><q>Ogni giorno usiamo Erbalatte per preparare il "formaggio del pastore": serve un latte di altissima qualità.</q><figcaption class="who"><span class="badge">Ristorante</span><span><b>Felicin</b><small>Monforte d'Alba</small></span></figcaption></figure>
+        <figure class="quote-item" style="margin:0"><q>I clienti notano la differenza, nella digeribilità e nel gusto.</q><figcaption class="who"><span class="badge">Gelateria</span><span><b>Ottimo!</b><small>Torino</small></span></figcaption></figure>
+      </div>
+      <div class="dots" role="group" aria-label="Scegli la testimonianza"></div>
+      <p style="margin-top:34px"><a class="link-arrow" href="professionisti.html">Erbalatte per la tua attività <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
+    </div>
+  </section>
+
+  <section class="section-tight" style="padding-top:0" aria-labelledby="ship-title">
+    <div class="wrap">
+      <div class="sign sign--leaf ship reveal">
+        <div class="leaves" data-leaves="8" aria-hidden="true"></div>
+        <div class="copy">
+          <span class="tag" style="background:#fff">Spediamo in tutta Italia</span>
+          <h2 id="ship-title">Vuoi provare <strong>Erbalatte?</strong></h2>
+          <p class="lede">Ordina online e ricevilo direttamente a casa con corriere espresso. La spedizione è sempre gratuita.</p>
+          <div class="hero-actions" style="margin-top:26px">
+            <a class="btn" href="negozio.html">Ordina ora</a>
+            <a class="btn btn--ghost" href="professionisti.html">Sono un professionista</a>
+          </div>
+        </div>
+        <div class="art"><img src="assets/img/bottle.png" alt="" loading="lazy" width="1139" height="1129"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/chrome.js" data-part="footer"></script>
+
+<script type="module">
+  import { getCatalog, eurL } from './assets/js/store.js';
+  import { initHero } from './assets/js/hero3d.js';
+  initHero(document.querySelector('[data-hero-stage]'));
+
+  const low = Math.min(...getCatalog().tiers.map((t) => t.perLitre));
+  document.querySelectorAll('[data-low]').forEach((el) => { el.textContent = 'da ' + eurL(low); });
+
+  // stats count up once
+  const obs = new IntersectionObserver((ents) => ents.forEach((en) => {
+    if (!en.isIntersecting) return;
+    obs.unobserve(en.target);
+    const el = en.target, to = +el.dataset.count, t0 = performance.now();
+    const tick = (now) => {
+      const k = Math.min(1, (now - t0) / 1600);
+      el.firstChild.nodeValue = '+' + Math.round(to * (1 - Math.pow(1 - k, 4)));
+      if (k < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }), { threshold: 0.6 });
+  document.querySelectorAll('[data-count]').forEach((el) => obs.observe(el));
+
+  // quotes: auto-advance, dots to pick
+  const items = [...document.querySelectorAll('.quote-item')];
+  const dots = document.querySelector('.dots');
+  let qi = 0, qt;
+  items.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', `Testimonianza ${i + 1}`);
+    b.addEventListener('click', () => { show(i); clearInterval(qt); });
+    dots.append(b);
+  });
+  function show(i) {
+    qi = i;
+    items.forEach((it, k) => it.classList.toggle('is-on', k === i));
+    [...dots.children].forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
+  }
+  show(0);
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) qt = setInterval(() => show((qi + 1) % items.length), 6000);
+</script>
+</body>
+</html>

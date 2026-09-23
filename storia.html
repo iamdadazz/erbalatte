@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La nostra storia · Erbalatte</title>
+<meta name="description" content="Dal prato al cartone: segui in 3D il viaggio di Erbalatte, il primo latte da Agricoltura Simbiotica. Dal suolo vivo alle frisone, fino alla confezione che arriva a casa tua.">
+<meta name="theme-color" content="#509A48">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<style>
+  .story-intro { position: relative; overflow: hidden; text-align: center; padding-block: clamp(48px, 7vw, 96px) clamp(24px, 3vw, 40px); }
+  .story-intro .display { margin-inline: auto; max-width: 15ch; }
+  .story-intro .lede { margin: 22px auto 0; }
+  .scroll-cue { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 36px; color: var(--ink-3); font-size: .85rem; }
+  .scroll-cue span { width: 26px; height: 42px; border-radius: 14px; box-shadow: inset 0 0 0 1.5px var(--line-strong); position: relative; }
+  .scroll-cue span::after { content: ""; position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: var(--green); animation: cue 1.8s var(--ease-out) infinite; }
+  @keyframes cue { 0% { transform: translateY(0); opacity: 1; } 80% { transform: translateY(14px); opacity: 0; } 100% { opacity: 0; } }
+
+  .story { position: relative; height: 720vh; }
+  .story-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: linear-gradient(180deg, #F4FAF2 0%, #FFFFFF 70%); }
+  .story-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .story-stage .fallback { display: none; }
+  .story-stage.no-webgl .fallback { display: block; position: absolute; inset: 20% 30%; width: 40%; object-fit: contain; }
+  .marker { position: absolute; left: 0; width: 1px; height: 1px; }
+
+  .chapters { position: absolute; inset: 0; pointer-events: none; }
+  .chapter {
+    position: absolute; left: clamp(20px, 5vw, 80px); top: 50%;
+    width: min(400px, calc(100% - 40px));
+    padding: 30px 32px 28px; border-radius: 26px;
+    background: rgba(255,255,255,.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lift), inset 0 0 0 1px var(--line);
+    opacity: 0; transform: translateY(calc(-50% + 24px));
+    transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+  }
+  .chapter.is-on { opacity: 1; transform: translateY(-50%); pointer-events: auto; }
+  .chapter .step { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; font-weight: 500; color: var(--green-600); margin-bottom: 12px; }
+  .chapter .step svg { width: 18px; height: 18px; }
+  .chapter h2 { font-size: clamp(1.7rem, 2.6vw, 2.25rem); margin-bottom: 12px; }
+  .chapter p { color: var(--ink-2); margin: 0; font-size: .98rem; }
+  .chapter .facts { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chapter .facts li { font-size: .78rem; font-weight: 500; color: var(--green-600); background: var(--mint-50); padding: 5px 11px; border-radius: 999px; }
+  .chapter .btn { margin-top: 22px; }
+
+  .rail { position: absolute; right: clamp(16px, 3vw, 44px); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 6px; }
+  .rail a { display: flex; align-items: center; justify-content: flex-end; gap: 10px; text-decoration: none; font-size: .8rem; color: var(--ink-3); padding: 4px 0; }
+  .rail a span { opacity: 0; transform: translateX(6px); transition: opacity .3s, transform .3s var(--ease-out); }
+  .rail a i { width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px var(--line-strong); transition: background-color .3s, box-shadow .3s, transform .3s var(--ease-out); }
+  .rail a:hover span, .rail a[aria-current="step"] span { opacity: 1; transform: none; }
+  .rail a[aria-current="step"] { color: var(--green-600); font-weight: 500; }
+  .rail a[aria-current="step"] i { background: var(--green); box-shadow: 0 0 0 4px var(--mint-100); transform: scale(1.1); }
+  .progress { position: absolute; left: 0; top: 0; height: 3px; background: var(--green); width: 0; }
+
+  @media (max-width: 760px) {
+    .chapter { left: 12px; right: 12px; width: auto; top: auto; bottom: 16px; padding: 22px 22px 20px; transform: translateY(24px); }
+    .chapter.is-on { transform: none; }
+    .chapter h2 { font-size: 1.5rem; }
+    .chapter .facts { display: none; }
+    .rail { top: 90px; transform: none; right: 12px; }
+    .rail a span { display: none; }
+  }
+
+  .chapters-grid { display: grid; gap: clamp(56px, 8vw, 110px); }
+  .chapter-row { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 80px); align-items: start; }
+  .chapter-row .mark { font-size: clamp(3.6rem, 9vw, 7rem); font-weight: 300; letter-spacing: -.05em; line-height: .9; color: var(--green); }
+  .chapter-row .mark small { display: block; font-size: .95rem; letter-spacing: 0; color: var(--ink-3); margin-top: 14px; font-weight: 400; line-height: 1.5; }
+  .chapter-row h2 { margin-bottom: 18px; }
+  .chapter-row p { color: var(--ink-2); max-width: 60ch; }
+  @media (max-width: 860px) { .chapter-row { grid-template-columns: 1fr; } }
+  .pills { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pills li { padding: 7px 14px; border-radius: 999px; background: var(--mint-50); color: var(--green-600); font-size: .88rem; font-weight: 500; box-shadow: inset 0 0 0 1px var(--mint-100); }
+  .triad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
+  .triad div { padding: 28px; border-radius: var(--r-md); background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
+  .triad b { display: block; font-size: 1.6rem; font-weight: 300; color: var(--green-600); letter-spacing: -.02em; margin-bottom: 6px; }
+  .triad span { color: var(--ink-2); font-size: .95rem; }
+  @media (max-width: 760px) { .triad { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<script src="assets/js/chrome.js" data-part="header" data-page="storia"></script>
+
+<main id="main">
+  <section class="story-intro" aria-labelledby="t">
+    <div class="leaves" data-leaves="12" aria-hidden="true"></div>
+    <div class="wrap" style="position:relative;z-index:1">
+      <span class="tag reveal">La nostra storia</span>
+      <h1 id="t" class="display reveal" style="margin-top:22px;--delay:.08s">Dal prato <strong>al tuo bicchiere.</strong></h1>
+      <p class="lede reveal" style="--delay:.16s">Scorri e segui il viaggio del nostro latte: dal suolo vivo dei prati di Monasterolo di Savigliano fino alla confezione che arriva a casa tua.</p>
+      <div class="scroll-cue reveal" style="--delay:.24s" aria-hidden="true"><span></span>Scorri</div>
+    </div>
+  </section>
+
+  <section class="story" data-story aria-label="Il viaggio di Erbalatte in sei capitoli">
+    <div class="marker" id="c0" style="top:0"></div>
+    <div class="marker" id="c1" style="top:calc((720vh - 100vh) * .2)"></div>
+    <div class="marker" id="c2" style="top:calc((720vh - 100vh) * .4)"></div>
+    <div class="marker" id="c3" style="top:calc((720vh - 100vh) * .6)"></div>
+    <div class="marker" id="c4" style="top:calc((720vh - 100vh) * .8)"></div>
+    <div class="marker" id="c5" style="top:calc(720vh - 100vh)"></div>
+    <div class="story-stage" data-story-stage>
+      <div class="progress" data-progress></div>
+      <canvas role="img" aria-label="Scena 3D animata: il viaggio del latte dal prato alla confezione"></canvas>
+      <img class="fallback" src="assets/img/bottle.png" alt="">
+      <div class="chapters">
+        <article class="chapter" data-ch="0">
+          <span class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V11M12 11c-4 0-7-3-7-7 4 0 7 3 7 7zM12 13c3 0 6-2.5 6-6-3.5 0-6 2.5-6 6z"/></svg>Il prato</span>
+          <h2>Tutto comincia <strong>dal suolo.</strong></h2>
+          <p>Con l'Università di Torino abbiamo riportato la vita nei nostri terreni grazie ai funghi micorrizici. Nei prati polifiti crescono tante varietà di erbe, come nei pascoli di una volta. E le api sono tornate.</p>
+          <ul class="facts"><li>No concimi chimici</li><li>No pesticidi</li><li>Dal 2016</li></ul>
+        </article>
+        <article class="chapter" data-ch="1">
+          <span class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10c0-3 3-5 7-5s7 2 7 5v3a5 5 0 01-5 5h-4a5 5 0 01-5-5z"/><path d="M9.5 11h.01M14.5 11h.01M10 15c1 .8 3 .8 4 0"/></svg>La colazione</span>
+          <h2>Erba, fieno e cereali <strong>di casa.</strong></h2>
+          <p>Le nostre frisone mangiano il foraggio dei prati, i fieni che produciamo noi e i cereali coltivati in azienda. Niente OGM, niente insilati di mais.</p>
+          <ul class="facts"><li>Foraggio autoprodotto</li><li>No OGM</li></ul>
+        </article>
+        <article class="chapter" data-ch="2">
+          <span class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></svg>La cura</span>
+          <h2>Le ragazze <strong>stanno bene.</strong></h2>
+          <p>Ogni mucca porta un orecchino che misura passi, ruminazione e riposo. Un'app ci dice in tempo reale come sta, così possiamo prenderci cura di lei al meglio.</p>
+          <ul class="facts"><li>Passi</li><li>Ruminazione</li><li>Riposo</li></ul>
+        </article>
+        <article class="chapter" data-ch="3">
+          <span class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8M9 3v3l-3 4v10h12V10l-3-4V3M6 13h12"/></svg>La mungitura</span>
+          <h2>Il latte, <strong>appena munto.</strong></h2>
+          <p>Più proteine, più vitamina A, più vitamina E: le analisi delle Università di Torino e di Pisa lo confermano. E niente va sprecato: il letame diventa biogas, energia rinnovabile e fertilizzante naturale per i prati.</p>
+          <ul class="facts"><li>+19% proteine</li><li>+27% vit. A</li><li>+25% vit. E</li></ul>
+        </article>
+        <article class="chapter" data-ch="4">
+          <span class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18M5 17v3M19 17v3M7 17V9h4v8M13 17v-6h4v6M9 9V6"/></svg>Il confezionamento</span>
+          <h2>Un litro alla volta, <strong>100% italiano.</strong></h2>
+          <p>Il nostro latte viene confezionato a Demonte, in provincia di Cuneo: UHT a lunga conservazione, per portare il sapore del prato ovunque.</p>
+          <ul class="facts"><li>Intero</li><li>Parzialmente scremato</li></ul>
+        </article>
+        <article class="chapter" data-ch="5">
+          <span class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg>A casa tua</span>
+          <h2>Dal nostro prato <strong>alla tua tavola.</strong></h2>
+          <p>Ordina online e ricevi Erbalatte con corriere espresso, con spedizione gratuita in tutta Italia.</p>
+          <a class="btn" href="negozio.html">Ordina Erbalatte</a>
+        </article>
+      </div>
+      <nav class="rail" aria-label="Capitoli della storia">
+        <a href="#c0"><span>Il prato</span><i></i></a>
+        <a href="#c1"><span>La colazione</span><i></i></a>
+        <a href="#c2"><span>La cura</span><i></i></a>
+        <a href="#c3"><span>La mungitura</span><i></i></a>
+        <a href="#c4"><span>Il confezionamento</span><i></i></a>
+        <a href="#c5"><span>A casa tua</span><i></i></a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Chi siamo">
+    <div class="wrap chapters-grid">
+      <article class="chapter-row reveal">
+        <div class="mark">2016<small>L'inizio del progetto, con l'Università<br>di Torino e il consorzio ECOSI'</small></div>
+        <div>
+          <h2>Una nuova <strong>agricoltura.</strong></h2>
+          <p>Nel 2016 abbiamo avuto l'intuizione di cambiare il nostro modo di fare agricoltura e di alimentare le nostre vacche, puntando su qualità e sostenibilità.</p>
+          <p>Abbiamo aperto le porte dell'azienda a professori esperti in colture prative e a ricercatori di microbiologia. In quattro anni di prove in campo abbiamo migliorato la vita microbica dei terreni con i funghi micorrizici, ottenendo foraggi e colture di ottima qualità.</p>
+          <ul class="pills"><li>No concimi chimici</li><li>No fitofarmaci</li><li>No pesticidi</li><li>No OGM</li><li>No insilati di mais</li></ul>
+        </div>
+      </article>
+      <article class="chapter-row reveal">
+        <div class="mark">6ª<small>generazione di allevatori<br>e agricoltori</small></div>
+        <div>
+          <h2>Un ritorno al passato per fare <strong>un balzo in avanti.</strong></h2>
+          <p>I fratelli Gianfranco e Marco Bergese, con i giovani Alessandro e Francesco: la sesta generazione dell'Azienda Agricola La Corte, a Monasterolo di Savigliano.</p>
+          <p><b>Non è soltanto latte, è la nostra visione di agricoltura.</b></p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-tight" style="padding-top:0" aria-labelledby="eq">
+    <div class="wrap">
+      <div class="sign sign--leaf sign-pad reveal" style="position:relative;overflow:hidden">
+        <div class="leaves" data-leaves="6" aria-hidden="true"></div>
+        <div style="position:relative;z-index:1">
+          <h2 id="eq">L'equilibrio <strong>ritrovato.</strong></h2>
+          <p class="lede" style="margin-top:16px;max-width:58ch">L'Agricoltura Simbiotica valorizza il legame che esiste in natura tra suolo, animali e uomo. Produrre latte simbiotico vuol dire ripristinare un equilibrio buono non solo per l'essere umano. Per tutti.</p>
+          <div class="triad">
+            <div><b>Suolo</b><span>Vivo, ricco di funghi micorrizici e microrganismi.</span></div>
+            <div><b>Animale</b><span>Frisone nutrite con ciò che cresce in azienda.</span></div>
+            <div><b>Uomo</b><span>Un latte più buono e più ricco di nutrienti.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cta">
+    <div class="wrap center">
+      <h2 id="cta" class="reveal">Assaggia <strong>la differenza.</strong></h2>
+      <p class="lede reveal" style="margin:16px auto 28px">Spedizione gratuita in tutta Italia, da 2,48 € al litro.</p>
+      <div class="hero-actions reveal" style="justify-content:center"><a class="btn" href="negozio.html">Vai al negozio</a><a class="btn btn--ghost" href="professionisti.html">Per professionisti</a></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/chrome.js" data-part="footer"></script>
+<script type="module">
+  import './assets/js/store.js';
+  import { initStory } from './assets/js/story3d.js';
+
+  const section = document.querySelector('[data-story]');
+  const cards = [...document.querySelectorAll('.chapter')];
+  const rail = [...document.querySelectorAll('.rail a')];
+  const bar = document.querySelector('[data-progress]');
+
+  function setChapter(ch) {
+    cards.forEach((c) => c.classList.toggle('is-on', +c.dataset.ch === ch));
+    rail.forEach((a, i) => { if (i === ch) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current'); });
+  }
+  const onScroll = () => {
+    const r = section.getBoundingClientRect();
+    const k = Math.min(1, Math.max(0, -r.top / (section.offsetHeight - innerHeight)));
+    bar.style.width = (k * 100).toFixed(2) + '%';
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  setChapter(0);
+  initStory(section, { onChapter: setChapter });
+</script>
+</body>
+</html>

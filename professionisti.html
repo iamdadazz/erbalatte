@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Per professionisti · Erbalatte</title>
+<meta name="description" content="Bar, gelaterie, panifici e ristoranti scelgono Erbalatte. Richiedi un preventivo per la tua attività.">
+<meta name="theme-color" content="#509A48">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .pro-hero .wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .kinds div { padding: 26px 22px; border-radius: var(--r-md); background: var(--mint-50); box-shadow: inset 0 0 0 1px var(--mint-100); display: flex; flex-direction: column; gap: 14px; transition: transform .5s var(--ease-out), box-shadow .5s var(--ease-out); }
+  .kinds div:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift), inset 0 0 0 1px var(--mint); }
+  .kinds svg { width: 40px; height: 40px; color: var(--green-600); }
+  .kinds b { font-weight: 600; }
+  .kinds small { color: var(--ink-3); display: block; line-height: 1.45; }
+  @media (max-width: 900px) { .pro-hero .wrap { grid-template-columns: 1fr; } }
+
+  .voices { columns: 3 300px; column-gap: 18px; }
+  .voice { break-inside: avoid; margin: 0 0 18px; padding: 30px 28px 26px; border-radius: var(--r-md); background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
+  .voice:first-child { background: var(--green); color: #fff; box-shadow: var(--shadow-lift); }
+  .voice q { display: block; quotes: none; font-size: 1.1rem; line-height: 1.6; font-weight: 300; }
+  .voice:first-child q { font-size: 1.5rem; line-height: 1.45; }
+  .voice q::before { content: "“"; } .voice q::after { content: "”"; }
+  .voice .who { justify-content: flex-start; margin-top: 20px; }
+  .voice:first-child .badge { background: rgba(255,255,255,.18); color: #fff; }
+  .voice:first-child small { color: #EAF5E7; }
+
+  .quote { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(28px, 5vw, 80px); align-items: start; }
+  .quote .why { position: sticky; top: 110px; }
+  .why ol { list-style: none; padding: 0; margin: 30px 0 0; display: grid; gap: 20px; counter-reset: s; }
+  .why li { display: grid; grid-template-columns: 42px 1fr; gap: 14px; color: var(--ink-2); }
+  .why li::before { counter-increment: s; content: counter(s); width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--mint-50); color: var(--green-600); font-weight: 600; box-shadow: inset 0 0 0 1px var(--mint-100); }
+  .why li b { display: block; color: var(--ink); font-weight: 600; }
+  .form { padding: clamp(28px, 4vw, 48px); }
+  .form h3 { margin-bottom: 22px; }
+  .kind-pick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 18px; border: 0; padding: 0; }
+  .kind-pick legend { font-size: .86rem; font-weight: 500; margin-bottom: 10px; }
+  .kind-pick label { position: relative; display: grid; place-items: center; gap: 6px; padding: 16px 6px; border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line-strong); cursor: pointer; font-weight: 500; font-size: .88rem; text-align: center; transition: box-shadow .2s, background-color .2s, color .2s; }
+  .kind-pick label:hover { box-shadow: inset 0 0 0 1px var(--green); }
+  .kind-pick input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .kind-pick svg { width: 28px; height: 28px; color: var(--green-600); }
+  .kind-pick label:has(input:checked) { background: var(--mint-50); box-shadow: inset 0 0 0 2px var(--green); color: var(--green-700); }
+  .kind-pick label:has(input:focus-visible) { outline: 2.5px solid var(--green); outline-offset: 3px; }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; color: var(--ink-2); margin: 6px 0 20px; }
+  .check input { width: 20px; height: 20px; accent-color: var(--green-600); margin-top: 2px; flex: none; }
+  .sent { display: none; text-align: center; padding: 30px 10px; }
+  .sent svg { width: 72px; margin: 0 auto 18px; color: var(--green); }
+  .form.is-sent form { display: none; }
+  .form.is-sent .sent { display: block; }
+  @media (max-width: 900px) { .quote { grid-template-columns: 1fr; } .quote .why { position: static; } }
+  @media (max-width: 520px) { .kind-pick { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<script src="assets/js/chrome.js" data-part="header" data-page="professionisti"></script>
+
+<main id="main">
+  <section class="page-hero pro-hero" aria-labelledby="t">
+    <div class="leaves" data-leaves="10" aria-hidden="true"></div>
+    <div class="wrap">
+      <div>
+        <nav class="crumbs" aria-label="Percorso"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Professionisti</span></nav>
+        <h1 id="t" class="display reveal">Il latte giusto <strong>per il tuo mestiere.</strong></h1>
+        <p class="lede reveal" style="--delay:.08s">Tanti professionisti della ristorazione hanno scelto Erbalatte per le loro ricette di punta. Hai un bar, una gelateria, un panificio o un ristorante e condividi la nostra filosofia?</p>
+        <div class="hero-actions reveal" style="margin-top:30px;--delay:.16s">
+          <a class="btn" href="#preventivo">Richiedi un preventivo</a>
+          <a class="btn btn--ghost" href="tel:+393426695924">Chiama 342 669 5924</a>
+        </div>
+      </div>
+      <div class="kinds reveal" style="--delay:.12s">
+        <div><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h26v8a13 13 0 01-26 0zM35 21h3a5 5 0 010 10h-4M6 42h36"/><path d="M17 12c0-3 3-3 3-6M24 12c0-3 3-3 3-6"/></svg><span><b>Bar</b><small>Per un cappuccino dalla crema soffice</small></span></div>
+        <div><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 22a8 8 0 1116 0M14 22h20l-10 22z"/></svg><span><b>Gelaterie</b><small>La dolcezza rotonda del latte di una volta</small></span></div>
+        <div><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30c0-10 7-16 16-16s16 6 16 16v4H8zM18 20l3 10M30 20l-3 10"/></svg><span><b>Panifici</b><small>Per le colazioni e le lavorazioni</small></span></div>
+        <div><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22h36v4a14 14 0 01-14 14h-8A14 14 0 016 26zM42 24h3M3 24h3"/></svg><span><b>Ristoranti</b><small>Anche per formaggi freschi fatti in casa</small></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="voices-title">
+    <div class="wrap">
+      <div class="head reveal">
+        <div>
+          <h2 id="voices-title">Scelto <strong>da loro.</strong></h2>
+          <p class="lede">Hanno trovato in Erbalatte il sapore, la qualità e la resa giusti, dopo lunghe ricerche.</p>
+        </div>
+      </div>
+      <div class="voices">
+        <figure class="voice reveal"><q>Abbiamo scoperto una cultura agricola fenomenale, di passione, di talento. Erbalatte è diventato per noi il latte principale, perché non riusciamo ad usarne altro.</q><figcaption class="who"><span class="badge">Panificio</span><span><b>Perino Vesco</b><small>Torino</small></span></figcaption></figure>
+        <figure class="voice reveal"><q>Abbiamo scelto Erbalatte per la qualità delle materie prime e perché rispetta gli animali come noi rispettiamo tutti i lavoratori che ci circondano.</q><figcaption class="who"><span class="badge">Bar</span><span><b>100 Vini e Affini</b><small>Torino</small></span></figcaption></figure>
+        <figure class="voice reveal"><q>Ogni giorno usiamo Erbalatte per preparare il "formaggio del pastore", un formaggio fresco e delicato.</q><figcaption class="who"><span class="badge">Ristorante</span><span><b>Felicin</b><small>Monforte d'Alba</small></span></figcaption></figure>
+        <figure class="voice reveal"><q>Dopo varie ricerche abbiamo trovato un latte dove le vacche finalmente si nutrono di erba, di prodotti sani.</q><figcaption class="who"><span class="badge">Gelateria</span><span><b>PAMA</b><small>Novara</small></span></figcaption></figure>
+        <figure class="voice reveal"><q>Il benessere animale riportato nella bontà del prodotto finito. Lo utilizziamo con ottimo successo.</q><figcaption class="who"><span class="badge">Gelateria</span><span><b>Ottimo!</b><small>Torino</small></span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="preventivo" class="section" style="padding-top:0;scroll-margin-top:90px" aria-labelledby="q-title">
+    <div class="wrap quote">
+      <div class="why">
+        <h2 id="q-title">Richiedi <strong>un preventivo.</strong></h2>
+        <p class="lede" style="margin-top:18px">Raccontaci della tua attività: ti ricontattiamo noi per capire quantità, consegne e condizioni.</p>
+        <ol>
+          <li><span><b>Compili il modulo</b>Bastano due minuti.</span></li>
+          <li><span><b>Ti chiamiamo</b>Parliamo di volumi e frequenza delle consegne.</span></li>
+          <li><span><b>Ricevi la proposta</b>Su misura per il tuo locale.</span></li>
+        </ol>
+      </div>
+      <div class="form sign" data-form-wrap>
+        <form data-quote novalidate>
+          <h3>La tua attività</h3>
+          <fieldset class="kind-pick">
+            <legend>Che tipo di attività hai?</legend>
+            <label><input type="radio" name="kind" value="bar" checked><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h26v8a13 13 0 01-26 0zM35 21h3a5 5 0 010 10h-4M6 42h36"/></svg>Bar</label>
+            <label><input type="radio" name="kind" value="gelateria"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 22a8 8 0 1116 0M14 22h20l-10 22z"/></svg>Gelateria</label>
+            <label><input type="radio" name="kind" value="panificio"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30c0-10 7-16 16-16s16 6 16 16v4H8zM18 20l3 10M30 20l-3 10"/></svg>Panificio</label>
+            <label><input type="radio" name="kind" value="ristorante"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22h36v4a14 14 0 01-14 14h-8A14 14 0 016 26zM42 24h3M3 24h3"/></svg>Ristorante</label>
+          </fieldset>
+          <div class="row2">
+            <div class="field"><label for="q-biz">Nome dell'attività</label><input id="q-biz" name="biz" required autocomplete="organization" placeholder="Caffè Centrale"><span class="err">Come si chiama il tuo locale?</span></div>
+            <div class="field"><label for="q-city">Città</label><input id="q-city" name="city" required autocomplete="address-level2" placeholder="Cuneo"><span class="err">Ci serve per organizzare le consegne.</span></div>
+          </div>
+          <div class="field">
+            <label for="q-vol">Quanto latte usi a settimana, circa?</label>
+            <select id="q-vol" name="vol"><option>Meno di 50 litri</option><option>50–150 litri</option><option>150–400 litri</option><option>Più di 400 litri</option><option>Non lo so ancora</option></select>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="q-name">Il tuo nome</label><input id="q-name" name="name" required autocomplete="name" placeholder="Luca Bianchi"><span class="err">Inserisci il tuo nome.</span></div>
+            <div class="field"><label for="q-tel">Telefono</label><input id="q-tel" name="tel" type="tel" required autocomplete="tel" placeholder="333 123 4567"><span class="err">Ti chiamiamo a questo numero.</span></div>
+          </div>
+          <div class="field"><label for="q-mail">Email</label><input id="q-mail" name="mail" type="email" required autocomplete="email" placeholder="luca@caffecentrale.it"><span class="err">Controlla l'indirizzo email.</span></div>
+          <div class="field"><label for="q-msg">Messaggio <span class="muted" style="font-weight:400">(facoltativo)</span></label><textarea id="q-msg" name="msg" placeholder="Es. cappuccini, gelato, colazioni…"></textarea></div>
+          <label class="check"><input type="checkbox" name="privacy" required><span>Ho letto l'<a href="#">informativa privacy</a> e acconsento a essere ricontattato.</span></label>
+          <button class="btn btn--block" type="submit">Invia la richiesta</button>
+        </form>
+        <div class="sent" role="status" aria-live="polite" tabindex="-1">
+          <svg viewBox="0 0 72 72" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="36" r="30"/><path d="M23 37l9 9 17-19"/></svg>
+          <h3>Grazie, richiesta ricevuta.</h3>
+          <p class="muted" style="margin-top:10px">Ti ricontattiamo al più presto. Nel mockup il modulo non invia dati.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/chrome.js" data-part="footer"></script>
+<script type="module">
+  import './assets/js/store.js';
+  const wrap = document.querySelector('[data-form-wrap]');
+  const form = document.querySelector('[data-quote]');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let bad = null;
+    form.querySelectorAll('input[required]:not([type=radio])').forEach((i) => {
+      const ok = i.type === 'checkbox' ? i.checked : i.checkValidity();
+      if (i.type !== 'checkbox') i.setAttribute('aria-invalid', String(!ok));
+      if (!ok && !bad) bad = i;
+    });
+    if (bad) { bad.focus(); return; }
+    wrap.classList.add('is-sent');
+    wrap.querySelector('.sent').focus();
+  });
+  form.addEventListener('input', (e) => { if (e.target.getAttribute('aria-invalid') === 'true' && e.target.checkValidity()) e.target.setAttribute('aria-invalid', 'false'); });
+</script>
+</body>
+</html>
