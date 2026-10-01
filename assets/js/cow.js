@@ -39,7 +39,11 @@ function hide(offset, scale = 1.25) {
   return m;
 }
 
-export function buildCow() {
+export function buildCow(opts = {}) {
+  // opts: { seed (patch pattern), hero (collar + bell, default true), scale }
+  const seed = opts.seed ?? 0;
+  const hero = opts.hero ?? true;
+  const P = (a, b, c) => [a + seed * 1.7, b + seed * 0.9, c - seed * 1.3]; // per-cow patches
   const root = new THREE.Group();
   const white = toon(0xfbfaf6);
   const pink = toon(0xf4a9a8);
@@ -52,7 +56,7 @@ export function buildCow() {
   const body = new THREE.Group();
   body.position.y = 0.95;
   root.add(body);
-  const belly = new THREE.Mesh(new THREE.SphereGeometry(0.62, 40, 28), hide([1.3, 0.2, 4.1]));
+  const belly = new THREE.Mesh(new THREE.SphereGeometry(0.62, 40, 28), hide(P(1.3, 0.2, 4.1)));
   belly.scale.set(1.45, 1, 1.02);
   body.add(belly);
 
@@ -62,7 +66,7 @@ export function buildCow() {
   [[0.52, 0.3], [0.52, -0.3], [-0.55, 0.3], [-0.55, -0.3]].forEach(([x, z], i) => {
     const pivot = new THREE.Group();
     pivot.position.set(x, 0.62, z);
-    const leg = new THREE.Mesh(legGeo, i % 3 === 0 ? hide([i * 3.1, 0.5, 1.2]) : white);
+    const leg = new THREE.Mesh(legGeo, i % 3 === 0 ? hide(P(i * 3.1, 0.5, 1.2)) : white);
     leg.position.y = -0.3;
     const hoof = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.16, 0.12, 16), hoofM);
     hoof.position.y = -0.56;
@@ -76,10 +80,11 @@ export function buildCow() {
   udder.scale.set(1.2, 0.8, 1);
   udder.position.set(-0.3, 0.46, 0);
   root.add(udder);
-  [[-0.22, 0.08], [-0.22, -0.08], [-0.38, 0.08], [-0.38, -0.08]].forEach(([x, z]) => {
+  const teats = [[-0.22, 0.08], [-0.22, -0.08], [-0.38, 0.08], [-0.38, -0.08]].map(([x, z]) => {
     const t = new THREE.Mesh(new THREE.CapsuleGeometry(0.025, 0.05, 4, 8), pinkDeep);
     t.position.set(x, 0.33, z);
     root.add(t);
+    return t;
   });
 
   /* tail */
@@ -101,7 +106,7 @@ export function buildCow() {
   const head = new THREE.Group();
   head.position.set(0.32, 0.26, 0);
   neck.add(head);
-  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.46, 40, 30), hide([7.7, 0.4, 5.5], 1.6));
+  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.46, 40, 30), hide(P(7.7, 0.4, 5.5), 1.6));
   skull.scale.set(1, 0.94, 1.02);
   head.add(skull);
   // collar with the bell, in brand green
@@ -109,14 +114,14 @@ export function buildCow() {
   collar.rotation.y = Math.PI / 2;
   collar.rotation.x = 0.35;
   collar.position.set(0.12, 0.02, 0);
-  neck.add(collar);
+  if (hero) neck.add(collar);
   const bell = new THREE.Group();
   bell.position.set(0.3, -0.3, 0);
   const bellBody = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.1, 0.14, 18), toon(0xf2c230));
   const clapper = new THREE.Mesh(new THREE.SphereGeometry(0.035, 10, 8), toon(0xb8861a));
   clapper.position.y = -0.08;
   bell.add(bellBody, clapper);
-  neck.add(bell);
+  if (hero) neck.add(bell);
 
   // snout
   const snout = new THREE.Mesh(new THREE.SphereGeometry(0.3, 32, 24), pink);
@@ -191,16 +196,23 @@ export function buildCow() {
     head.add(tuftH);
   }
 
-  root.traverse((o) => { if (o.isMesh) { o.castShadow = true; } });
+  root.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.material.toneMapped = false; } });
+  // everything sits in a posture group so she can settle down on the straw
+  const posture = new THREE.Group();
+  [...root.children].forEach((c) => posture.add(c));
+  root.add(posture);
+  if (opts.scale) root.scale.setScalar(opts.scale);
 
   /* ---------- behaviour ---------- */
-  let t = 0, blinkT = 2 + Math.random() * 2, graze = 0, walk = 0;
-  const state = { root, head, neck, tag, eyes };
+  let t = seed * 3.7, blinkT = 2 + Math.random() * 2, graze = 0, walk = 0, lie = 0, first = true;
+  const state = { root, head, neck, tag, eyes, udder, teats };
 
   state.update = (dt, opts = {}) => {
+    if (first) { graze = opts.graze ?? 0; lie = opts.lie ?? 0; first = false; } // start in pose
     t += dt;
     graze += ((opts.graze ?? 0) - graze) * Math.min(1, dt * 2.5);
     walk += ((opts.walk ?? 0) - walk) * Math.min(1, dt * 4);
+    lie += ((opts.lie ?? 0) - lie) * Math.min(1, dt * 1.6);
     const look = opts.look ?? 0;
 
     // head: down to the grass when grazing, curious tilt otherwise
@@ -225,7 +237,11 @@ export function buildCow() {
 
     // walk cycle with a happy bounce
     const ph = t * 7;
-    legs.forEach((l, i) => { l.rotation.z = Math.sin(ph + (i === 0 || i === 3 ? 0 : Math.PI)) * 0.45 * walk; });
+    legs.forEach((l, i) => {
+      l.rotation.z = Math.sin(ph + (i === 0 || i === 3 ? 0 : Math.PI)) * 0.45 * walk;
+      l.scale.y = 1 - lie * 0.7; // tucked under when lying
+    });
+    posture.position.y = -lie * 0.38;
     body.position.y = 0.95 + Math.abs(Math.sin(ph)) * 0.05 * walk + Math.sin(t * 1.4) * 0.012 * (1 - walk);
     body.rotation.z = Math.sin(ph) * 0.03 * walk;
     // breathing

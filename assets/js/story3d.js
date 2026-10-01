@@ -5,7 +5,7 @@
    initStory(section, { onChapter }) — section is the tall scroll container. */
 
 import * as THREE from 'three';
-import { buildRealCow, buildBee, buildMeadow, buildIsland, buildLeafBurst, toon } from './cow.js';
+import { buildCow, buildBee, buildMeadow, buildIsland, buildLeafBurst, toon } from './cow.js';
 import { buildCarton } from './carton3d.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -126,7 +126,7 @@ export async function initStory(section, { onChapter } = {}) {
   scene.add(meadow);
   catcher(5, X.meadow);
   const meadowCows = [[-2.2, -1.6, 0.6, 21], [2.6, -1.9, 2.6, 33]].map(([x, z, r, seed]) => {
-    const c = buildRealCow({ seed, scale: 0.92 });
+    const c = buildCow({ seed, hero: false, scale: 0.92 });
     c.root.position.set(X.meadow + x, 0, z); c.root.rotation.y = r;
     scene.add(c.root); return c;
   });
@@ -192,7 +192,7 @@ export async function initStory(section, { onChapter } = {}) {
     { x: 0.4, z: -0.55, r: 2.35, seed: 52, pose: { graze: 1 } },
     { x: -2.4, z: 1.1, r: -0.4, seed: 63, pose: { lie: 1 } },
     { x: 2.5, z: 0.1, r: 2.6, seed: 74, pose: { look: 0.4 } },
-  ].map((h) => { const c = buildRealCow({ seed: h.seed }); c.root.position.set(X.barn + h.x, 0, h.z); c.root.rotation.y = h.r; scene.add(c.root); c.pose = h.pose; return c; });
+  ].map((h) => { const c = buildCow({ seed: h.seed, hero: false }); c.root.position.set(X.barn + h.x, 0, h.z); c.root.rotation.y = h.r; scene.add(c.root); c.pose = h.pose; return c; });
   // hearts: a soft, occasional touch while she is cared for
   const heartShape = new THREE.Shape();
   heartShape.moveTo(0, -0.3);
@@ -272,7 +272,7 @@ export async function initStory(section, { onChapter } = {}) {
   shadowy(milking);
   scene.add(milking);
   catcher(4.8, X.milk);
-  const neighbour = buildRealCow({ seed: 88 });
+  const neighbour = buildCow({ seed: 88, hero: false });
   neighbour.root.position.set(X.milk - 0.7, 0, -0.85); neighbour.root.rotation.y = 0;
   scene.add(neighbour.root);
   // milking cluster: four cups with clear short tubes to a claw
@@ -368,7 +368,7 @@ export async function initStory(section, { onChapter } = {}) {
   });
 
   /* ---------- our cow ---------- */
-  const cow = buildRealCow({ seed: 7, hero: true, scale: 1 });
+  const cow = buildCow();
   scene.add(cow.root);
 
   /* ---------- camera path: [position, lookAt] per chapter ---------- */

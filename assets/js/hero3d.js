@@ -3,7 +3,7 @@
    swishes her tail; bees work the clover. Light, toon-shaded, on white. */
 
 import * as THREE from 'three';
-import { buildRealCow, buildBee, buildMeadow, buildIsland } from './cow.js';
+import { buildCow, buildBee, buildMeadow, buildIsland } from './cow.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -19,14 +19,13 @@ export function initHero(stage) {
   }
   renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
-  scene.add(new THREE.HemisphereLight(0xfdfdf7, 0xc9dcbf, 1.9));
-  const sun = new THREE.DirectionalLight(0xfff1dc, 2.6);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xcfe8c8, 2.2));
+  const sun = new THREE.DirectionalLight(0xfffaf0, 2.2);
   sun.position.set(4, 8, 5);
   sun.castShadow = true;
   sun.shadow.mapSize.set(1024, 1024);
@@ -47,9 +46,10 @@ export function initHero(stage) {
   shadowCatcher.receiveShadow = true;
   world.add(shadowCatcher);
 
-  const cow = buildRealCow({ seed: 7, hero: true, scale: 1.3 });
-  cow.root.position.set(0.45, 0, 0.1);
-  cow.root.rotation.y = -2.55;
+  const cow = buildCow();
+  cow.root.position.set(0.15, 0, 0.35);
+  cow.root.rotation.y = -2.3;
+  cow.root.scale.setScalar(1.45);
   world.add(cow.root);
 
   const bees = [0, 1].map((i) => {
