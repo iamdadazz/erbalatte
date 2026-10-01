@@ -47,10 +47,16 @@
 
         <div class="buy">
           <div class="sum"><b data-total>35,88 €</b><small data-total-note>12 litri · 2,99 €/L · spedizione gratuita</small></div>
-          <button type="button" class="btn" data-add>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h2l2.2 10.2a1.5 1.5 0 001.5 1.2h7.9a1.5 1.5 0 001.5-1.1L20.5 8.5H7"/><path d="M13 3v6M10 6h6"/></svg>
-            Aggiungi al carrello
-          </button>
+          <div class="buy-actions">
+            <button type="button" class="btn" data-buy>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg>
+              Acquista ora
+            </button>
+            <button type="button" class="btn btn--ghost" data-add>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h2l2.2 10.2a1.5 1.5 0 001.5 1.2h7.9a1.5 1.5 0 001.5-1.1L20.5 8.5H7"/><path d="M13 3v6M10 6h6"/></svg>
+              Aggiungi al carrello
+            </button>
+          </div>
         </div>
         <p class="stock" data-stock>Disponibile</p>
 
@@ -115,7 +121,7 @@
 <script src="assets/js/chrome.js" data-part="footer"></script>
 
 <script type="module">
-  import { getCatalog, eur, eurL, tierFor, addToCart } from './assets/js/store.js';
+  import { getCatalog, eur, eurL, tierFor, addToCart, buyNow } from './assets/js/store.js';
   import { initCarton } from './assets/js/carton3d.js';
 
   const NUTRI = [['Energia', '278 kJ / 67 kcal'], ['Grassi', '3,8 g'], ['di cui acidi grassi saturi', '2,2 g'], ['Carboidrati', '4,8 g'], ['di cui zuccheri', '4,8 g'], ['Proteine', '3,3 g'], ['Sale', '0,12 g'], ['Calcio', '120 mg (15% VNR)']];
@@ -154,12 +160,12 @@
       ? `<table class="nutri"><tbody>${NUTRI.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</tbody></table><p style="margin:10px 0 0;font-size:.85rem">Valori riportati sulla confezione.</p>`
       : '<p class="placeholder-note" style="margin:0">Valori da inserire dalla confezione del Parzialmente scremato</p>';
     const stock = document.querySelector('[data-stock]');
-    const addBtn = document.querySelector('[data-add]');
+    const btns = document.querySelectorAll('[data-add], [data-buy]');
     if (!p.active || p.stock <= 0) {
       stock.className = 'stock out'; stock.textContent = 'Momentaneamente esaurito';
-      addBtn.disabled = true;
+      btns.forEach((b) => { b.disabled = true; });
     } else {
-      addBtn.disabled = false;
+      btns.forEach((b) => { b.disabled = false; });
       stock.className = 'stock' + (p.stock < 20 ? ' low' : '');
       stock.textContent = p.stock < 20 ? `Ultime ${p.stock} casse disponibili` : 'Disponibile · pronto per la spedizione';
     }
@@ -188,6 +194,7 @@
     document.querySelectorAll('[data-face]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
   }));
   document.querySelector('[data-add]').addEventListener('click', () => addToCart(kind, cases));
+  document.querySelector('[data-buy]').addEventListener('click', () => buyNow(kind, cases));
   window.addEventListener('storage', () => { renderLadder(); renderProduct(); });
 
   renderLadder();

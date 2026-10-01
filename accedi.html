@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accedi · Erbalatte</title>
+<meta name="description" content="Accedi al tuo account Erbalatte per seguire i tuoi ordini e ordinare più velocemente.">
+<meta name="theme-color" content="#509A48">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<script src="assets/js/chrome.js" data-part="header" data-page="account"></script>
+
+<main id="main" class="auth">
+  <div class="auth-art" aria-hidden="true">
+    <img src="assets/img/strip2.jpg" alt="">
+    <blockquote>Che bello rivederti. <b>Le ragazze ti salutano.</b></blockquote>
+  </div>
+  <div class="auth-main">
+    <div class="auth-card">
+      <h1>Accedi</h1>
+      <p class="lede">Segui i tuoi ordini e paga in un attimo, con i tuoi dati già pronti.</p>
+      <div class="form-error" role="alert" data-error></div>
+      <form data-login novalidate>
+        <div class="field"><label for="l-email">Email</label><input id="l-email" name="email" type="email" autocomplete="email" required placeholder="maria@esempio.it"><span class="err">Inserisci un'email valida.</span></div>
+        <div class="field"><label for="l-pw">Password</label>
+          <div class="pw-wrap"><input id="l-pw" name="password" type="password" autocomplete="current-password" required minlength="8"><button type="button" data-show aria-controls="l-pw">Mostra</button></div>
+          <span class="err">La password ha almeno 8 caratteri.</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:-2px 0 18px">
+          <label class="check" style="margin:0"><input type="checkbox" name="remember" checked><span>Ricordami</span></label>
+          <a href="#" data-forgot style="font-size:.88rem;color:var(--green-600)">Password dimenticata?</a>
+        </div>
+        <button class="btn btn--block" type="submit">Accedi</button>
+      </form>
+      <p class="auth-alt">Non hai un account? <a href="registrati.html">Registrati</a>: bastano due minuti.</p>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+  import { login, currentUser, toast } from './assets/js/store.js';
+  if (currentUser()) location.replace('account.html');
+  const form = document.querySelector('[data-login]');
+  const err = document.querySelector('[data-error]');
+  document.querySelector('[data-show]').addEventListener('click', (e) => {
+    const i = document.getElementById('l-pw'); const show = i.type === 'password';
+    i.type = show ? 'text' : 'password'; e.currentTarget.textContent = show ? 'Nascondi' : 'Mostra';
+  });
+  document.querySelector('[data-forgot]').addEventListener('click', (e) => { e.preventDefault(); toast('Ti invieremo un link per reimpostare la password (attivo nella fase 2).'); });
+  form.addEventListener('input', (e) => { if (e.target.checkValidity()) e.target.removeAttribute('aria-invalid'); });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.classList.remove('is-on');
+    let bad = null;
+    form.querySelectorAll('input[required]').forEach((i) => { const ok = i.checkValidity(); i.setAttribute('aria-invalid', String(!ok)); if (!ok && !bad) bad = i; });
+    if (bad) { bad.focus(); return; }
+    try {
+      await login(form.email.value, form.password.value);
+      const back = new URLSearchParams(location.search).get('next');
+      location.href = back && /^[\w-]+\.html/.test(back) ? back : 'account.html';
+    } catch {
+      err.textContent = 'Email o password non corretti. Riprova, oppure registrati se è la prima volta.';
+      err.classList.add('is-on');
+      form.password.focus();
+    }
+  });
+</script>
+</body>
+</html>

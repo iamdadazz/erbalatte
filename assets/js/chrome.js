@@ -21,9 +21,11 @@
         '<a href="index.html#latte"' + cur('latte') + '>Il latte</a>' +
         '<a href="negozio.html"' + cur('negozio') + '>Negozio</a>' +
         '<a href="professionisti.html"' + cur('professionisti') + '>Professionisti</a>' +
+        '<a href="blog.html"' + cur('blog') + '>Blog</a>' +
       '</nav>' +
       '<div class="header-actions">' +
         (page === 'negozio' ? '' : '<a class="btn header-order" href="negozio.html">Ordina</a>') +
+        '<a class="icon-btn" data-account href="accedi.html" aria-label="Accedi o registrati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></svg></a>' +
         '<button class="icon-btn" data-open-cart aria-label="Apri carrello">' + cart +
           '<span class="cart-count" data-cart-count data-empty="true">0</span></button>' +
         '<button class="icon-btn menu-btn" data-menu aria-expanded="false" aria-controls="menu" aria-label="Menu">' +
@@ -35,7 +37,7 @@
       '<button class="icon-btn" data-menu aria-label="Chiudi menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
       '<nav aria-label="Menu mobile">' +
         '<a href="index.html">Home</a><a href="storia.html">La nostra storia</a><a href="index.html#latte">Il latte</a>' +
-        '<a href="negozio.html">Negozio</a><a href="professionisti.html">Professionisti</a>' +
+        '<a href="negozio.html">Negozio</a><a href="professionisti.html">Professionisti</a><a href="blog.html">Blog</a><a href="accedi.html" data-account>Il mio account</a>' +
       '</nav>' +
       '<div class="sheet-foot">342 669 5924 · info@erbalatte.it<br>Via Massao 3, Monasterolo di Savigliano (CN)</div>' +
     '</div>';
@@ -52,8 +54,8 @@
             '<a href="https://www.tiktok.com/@erbalatte_" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3h-3v12.2a2.7 2.7 0 11-2.7-2.7c.3 0 .5 0 .8.1V9.5a5.8 5.8 0 105 5.7V9.1a7.3 7.3 0 004.3 1.4v-3a4.3 4.3 0 01-4.4-4.5z"/></svg></a>' +
           '</div>' +
         '</div>' +
-        '<div><h4>Erbalatte</h4><ul><li><a href="storia.html">La nostra storia</a></li><li><a href="index.html#latte">Il latte</a></li><li><a href="professionisti.html">Scelto da</a></li></ul></div>' +
-        '<div><h4>Negozio</h4><ul><li><a href="negozio.html">Tutti i prodotti</a></li><li><a href="#" data-open-cart>Carrello</a></li><li><a href="negozio.html#faq">Spedizioni e FAQ</a></li></ul></div>' +
+        '<div><h4>Erbalatte</h4><ul><li><a href="storia.html">La nostra storia</a></li><li><a href="index.html#latte">Il latte</a></li><li><a href="professionisti.html">Scelto da</a></li><li><a href="blog.html">Blog</a></li></ul></div>' +
+        '<div><h4>Negozio</h4><ul><li><a href="negozio.html">Tutti i prodotti</a></li><li><a href="#" data-open-cart>Carrello</a></li><li><a href="accedi.html" data-account>Il mio account</a></li><li><a href="negozio.html#faq">Spedizioni e FAQ</a></li></ul></div>' +
         '<div><h4>Contatti</h4><ul><li><a href="tel:+393426695924">342 669 5924</a></li><li><a href="mailto:info@erbalatte.it">info@erbalatte.it</a></li><li><span class="muted" style="font-size:.95rem">Via Massao 3<br>12030 Monasterolo di Savigliano (CN)</span></li></ul></div>' +
       '</div>' +
       '<div class="footer-bottom"><span>© Erbalatte · Azienda Agricola La Corte</span>' +

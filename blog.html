@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog · Erbalatte</title>
+<meta name="description" content="Notizie dalla Corte: Erbalatte in TV e sui giornali, eventi, visite in azienda e approfondimenti sull'Agricoltura Simbiotica.">
+<meta name="theme-color" content="#509A48">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<script src="assets/js/chrome.js" data-part="header" data-page="blog"></script>
+
+<main id="main">
+  <section class="page-hero" aria-labelledby="t">
+    <div class="leaves" data-leaves="10" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="tag reveal">Il blog di Erbalatte</span>
+      <h1 id="t" class="display reveal" style="margin-top:20px;--delay:.06s">Notizie <strong>dalla Corte.</strong></h1>
+      <p class="lede reveal" style="--delay:.12s">Erbalatte in TV e sui giornali, le visite in azienda, gli eventi e gli approfondimenti sull'Agricoltura Simbiotica.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(24px,4vw,48px)" aria-label="Articoli">
+    <div class="wrap">
+      <div data-feature></div>
+      <div class="filters" role="group" aria-label="Filtra per argomento" data-filters></div>
+      <div class="posts" data-posts aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/chrome.js" data-part="footer"></script>
+<script type="module">
+  import './assets/js/store.js';
+  import { POSTS, CATEGORIES, fmtDate } from './assets/js/blog-data.js';
+
+  const posts = [...POSTS].sort((a, b) => b.date.localeCompare(a.date));
+  // feature the newest story with real substance (skip notices with nothing to read yet)
+  const feat = posts.find((p) => !p.body.includes('class="note"')) || posts[0];
+  const url = (p) => `articolo.html?a=${p.slug}`;
+  const meta = (p) => `<div class="meta"><span class="cat">${CATEGORIES[p.cat]}</span><time datetime="${p.date}">${fmtDate(p.date)}</time><span>${p.read} min di lettura</span></div>`;
+
+  document.querySelector('[data-feature]').innerHTML = `
+    <a class="blog-feature reveal" href="${url(feat)}">
+      <div class="img"><img src="${feat.cover}" alt="${feat.alt}"></div>
+      <div>${meta(feat)}<h2>${feat.title}</h2><p class="lede">${feat.excerpt}</p>
+      <span class="link-arrow">Leggi l'articolo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+    </a>`;
+
+  const grid = document.querySelector('[data-posts]');
+  grid.innerHTML = posts.filter((p) => p !== feat).map((p, i) => `
+    <a class="post-card reveal" style="--delay:${(i % 3) * 0.06}s" href="${url(p)}" data-cat="${p.cat}">
+      <div class="img"><img src="${p.cover}" alt="${p.alt}" loading="lazy"></div>
+      ${meta(p)}<h3>${p.title}</h3><p>${p.excerpt}</p>
+    </a>`).join('');
+
+  const filters = document.querySelector('[data-filters]');
+  const cats = [['all', 'Tutti'], ...Object.entries(CATEGORIES).filter(([k]) => posts.some((p) => p.cat === k))];
+  filters.innerHTML = cats.map(([k, v]) => `<button type="button" data-f="${k}" aria-pressed="${k === 'all'}">${v}</button>`).join('');
+  filters.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-f]'); if (!b) return;
+    filters.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    const go = () => grid.querySelectorAll('.post-card').forEach((c) => c.classList.toggle('is-hidden', b.dataset.f !== 'all' && c.dataset.cat !== b.dataset.f));
+    document.startViewTransition ? document.startViewTransition(go) : go();
+  });
+
+  // reveal observer from store.js ran before these cards existed
+  const io = new IntersectionObserver((en) => en.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('is-in'); io.unobserve(x.target); } }), { threshold: 0.06 });
+  document.querySelectorAll('[data-posts] .reveal, [data-feature] .reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>

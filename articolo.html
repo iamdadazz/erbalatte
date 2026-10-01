@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog · Erbalatte</title>
+<meta name="description" content="Notizie dalla Corte, il blog di Erbalatte.">
+<meta name="theme-color" content="#509A48">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="read-progress" data-progress aria-hidden="true"></div>
+<script src="assets/js/chrome.js" data-part="header" data-page="blog"></script>
+
+<main id="main">
+  <article data-article>
+    <header class="article" style="padding-top:clamp(40px,6vw,80px)">
+      <nav class="crumbs" aria-label="Percorso"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="blog.html">Blog</a></nav>
+      <div data-meta></div>
+      <h1 data-title>Articolo</h1>
+      <p class="lede" data-excerpt></p>
+    </header>
+    <figure class="article-cover" data-cover style="margin-bottom:48px"></figure>
+    <div class="article">
+      <div class="prose" data-body></div>
+      <div data-video></div>
+      <div data-sources></div>
+      <div class="share"><span>Condividi</span>
+        <button type="button" data-copy aria-label="Copia il link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg></button>
+        <a data-wa target="_blank" rel="noopener" aria-label="Condividi su WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.4 9.4 0 00-8.1 14.2L2.6 21.5l4.9-1.3A9.4 9.4 0 1012 2.5zm0 17.1a7.7 7.7 0 01-3.9-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A7.7 7.7 0 1112 19.6zm4.2-5.8c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.3 6.3 0 01-3.1-2.7c-.2-.4.2-.4.7-1.3a.4.4 0 000-.4l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5a.9.9 0 00-.7.3 2.8 2.8 0 00-.9 2.1 4.9 4.9 0 001 2.6 11.2 11.2 0 004.3 3.8c1.6.7 2.2.7 3 .6a2.6 2.6 0 001.7-1.2 2.1 2.1 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg></a>
+      </div>
+    </div>
+  </article>
+
+  <section class="section" aria-labelledby="more">
+    <div class="wrap">
+      <div class="head"><div><h2 id="more">Continua <strong>a leggere</strong></h2></div><a class="link-arrow" href="blog.html">Tutti gli articoli <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      <div class="posts" data-more></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/chrome.js" data-part="footer"></script>
+<script type="module">
+  import { toast } from './assets/js/store.js';
+  import { POSTS, CATEGORIES, fmtDate, bySlug } from './assets/js/blog-data.js';
+
+  const slug = new URLSearchParams(location.search).get('a');
+  const p = bySlug(slug) || [...POSTS].sort((a, b) => b.date.localeCompare(a.date))[0];
+  const ext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 5h5v5M19 5l-8 8M10 6H6a1 1 0 00-1 1v11a1 1 0 001 1h11a1 1 0 001-1v-4"/></svg>';
+
+  document.title = `${p.title} · Erbalatte`;
+  document.querySelector('meta[name="description"]').content = p.excerpt;
+  document.querySelector('[data-meta]').innerHTML = `<div class="meta"><span class="cat">${CATEGORIES[p.cat]}</span><time datetime="${p.date}">${fmtDate(p.date)}</time><span>${p.read} min di lettura</span></div>`;
+  document.querySelector('[data-title]').textContent = p.title;
+  document.querySelector('[data-excerpt]').textContent = p.excerpt;
+  document.querySelector('[data-cover]').innerHTML = `<img src="${p.cover}" alt="${p.alt}">`;
+  document.querySelector('[data-body]').innerHTML = p.body;
+  if (p.video) document.querySelector('[data-video]').innerHTML = `<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${p.video}" title="Video: ${p.title}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
+  if (p.sources.length) document.querySelector('[data-sources]').innerHTML = `<aside class="sources"><h2>Fonti e link</h2><ul>${p.sources.map((s) => `<li><a href="${s.url}" target="_blank" rel="noopener">${ext}${s.label}</a></li>`).join('')}</ul></aside>`;
+
+  const here = location.href;
+  document.querySelector('[data-wa]').href = 'https://wa.me/?text=' + encodeURIComponent(`${p.title} ${here}`);
+  document.querySelector('[data-copy]').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(here); toast('Link copiato'); } catch { toast('Copia il link dalla barra degli indirizzi'); }
+  });
+
+  const others = POSTS.filter((x) => x !== p).sort((a, b) => (b.cat === p.cat) - (a.cat === p.cat) || b.date.localeCompare(a.date)).slice(0, 3);
+  document.querySelector('[data-more]').innerHTML = others.map((x) => `
+    <a class="post-card" href="articolo.html?a=${x.slug}">
+      <div class="img"><img src="${x.cover}" alt="${x.alt}" loading="lazy"></div>
+      <div class="meta"><span class="cat">${CATEGORIES[x.cat]}</span><time datetime="${x.date}">${fmtDate(x.date)}</time></div>
+      <h3>${x.title}</h3><p>${x.excerpt}</p>
+    </a>`).join('');
+
+  const bar = document.querySelector('[data-progress]');
+  const art = document.querySelector('[data-article]');
+  const onScroll = () => {
+    const r = art.getBoundingClientRect();
+    bar.style.transform = `scaleX(${Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)))})`;
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>

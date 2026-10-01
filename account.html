@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il mio account · Erbalatte</title>
+<meta name="theme-color" content="#509A48">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .acct-card { padding: 26px 28px; }
+  .acct-card h2 { font-size: 1.25rem; font-weight: 600; letter-spacing: 0; margin-bottom: 14px; }
+  .kv { display: grid; gap: 10px; font-size: .95rem; }
+  .kv div { display: grid; grid-template-columns: 120px 1fr; gap: 12px; }
+  .kv dt { color: var(--ink-3); }
+  .kv dd { margin: 0; }
+  .empty-orders { text-align: center; padding: 44px 20px; }
+  .empty-orders svg { width: 72px; margin: 0 auto 16px; color: var(--sage); }
+  .welcome { display: none; padding: 14px 18px; border-radius: 16px; background: var(--mint-50); box-shadow: inset 0 0 0 1px var(--mint-100); margin-bottom: 24px; color: var(--green-700); }
+  .welcome.is-on { display: block; }
+</style>
+</head>
+<body>
+<script src="assets/js/chrome.js" data-part="header" data-page="account"></script>
+
+<main id="main" class="section" style="padding-top:clamp(40px,6vw,72px)">
+  <div class="wrap">
+    <div class="welcome" data-welcome role="status">Ti diamo il benvenuto: il tuo account è pronto.</div>
+    <div class="acct-head">
+      <div>
+        <span class="tag">Il mio account</span>
+        <h1 class="display" style="font-size:clamp(2.2rem,4.6vw,3.6rem);margin-top:16px" data-hello>Ciao!</h1>
+      </div>
+      <div class="hero-actions">
+        <a class="btn" href="negozio.html">Ordina di nuovo</a>
+        <button class="btn btn--ghost" type="button" data-logout>Esci</button>
+      </div>
+    </div>
+
+    <div class="acct-grid">
+      <section id="ordini" aria-labelledby="o-title">
+        <h2 id="o-title" class="h3" style="margin-bottom:16px">I tuoi ordini</h2>
+        <div data-orders></div>
+      </section>
+      <aside class="sign acct-card" aria-labelledby="p-title">
+        <h2 id="p-title">I tuoi dati</h2>
+        <dl class="kv" data-profile></dl>
+        <p class="muted" style="font-size:.86rem;margin:18px 0 0">Per cambiare indirizzo o dati di fatturazione scrivici a <a href="mailto:info@erbalatte.it">info@erbalatte.it</a>. Nella fase 2 si modificheranno da qui.</p>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script src="assets/js/chrome.js" data-part="footer"></script>
+<script type="module">
+  import { currentUser, logout, getOrders, statusLabel, STATUSES, trackingUrl, eur, getCatalog } from './assets/js/store.js';
+  const u = currentUser();
+  if (!u) location.replace('accedi.html?next=account.html');
+  else render();
+
+  function render() {
+    if (location.search.includes('benvenuto')) document.querySelector('[data-welcome]').classList.add('is-on');
+    document.querySelector('[data-hello]').innerHTML = `Ciao, <strong>${esc(u.firstName || '')}</strong>`;
+    const row = (k, v) => v ? `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>` : '';
+    document.querySelector('[data-profile]').innerHTML =
+      row('Nome', `${u.firstName} ${u.lastName}`) + row('Email', u.email) + row('Telefono', u.phone) +
+      row('Indirizzo', `${u.street || ''} ${u.number || ''}, ${u.cap || ''} ${u.city || ''} (${u.prov || ''})`) +
+      row('Note corriere', u.notes) + row('Azienda', u.company) + row('P. IVA', u.vat) + row('SDI / PEC', u.sdi) +
+      row('Newsletter', u.newsletter ? 'Sì' : 'No');
+
+    const mine = getOrders().filter((o) => o.customer.email.toLowerCase() === u.email);
+    const box = document.querySelector('[data-orders]');
+    if (!mine.length) {
+      box.innerHTML = `<div class="sign empty-orders"><svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M30 26h36v58H30zM30 26l6-12h24l6 12M44 8h8v6h-8z"/></svg><b style="display:block;font-size:1.15rem;margin-bottom:6px">Nessun ordine, per ora</b><p class="muted" style="margin:0 0 20px">Il tuo primo Erbalatte è a un clic, con spedizione gratuita.</p><a class="btn" href="negozio.html">Vai al negozio</a></div>`;
+      return;
+    }
+    const steps = ['pagato', 'preparazione', 'spedito', 'consegna', 'consegnato'];
+    const cat = getCatalog();
+    box.innerHTML = mine.map((o) => {
+      const s = STATUSES.find((x) => x.id === o.status);
+      const k = Math.max(0, steps.indexOf(o.status));
+      const url = trackingUrl(o.carrier, o.tracking);
+      return `<article class="sign order-card">
+        <div class="order-top">
+          <div><b>Ordine ${o.id}</b><small>${new Date(o.createdAt).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}</small></div>
+          <div style="text-align:right"><span class="pill ${s?.tone || ''}">${statusLabel(o.status)}</span><small class="num" style="margin-top:6px">${eur(o.total)}</small></div>
+        </div>
+        <p class="order-lines">${o.lines.map((l) => `${cat.products[l.id]?.name || l.id} × ${l.cases}`).join(' · ')}</p>
+        ${o.status === 'annullato' ? '' : `<div class="track" style="--k:${k / 4}"><div class="fill"></div>${steps.map((st, i) => `<span class="${i <= k ? 'on' : ''}"><i></i>${statusLabel(st)}</span>`).join('')}</div>`}
+        ${o.tracking ? `<div class="ship-info"><span>Corriere <b>${esc(o.carrier)}</b></span><span>N. spedizione <b class="num">${esc(o.tracking)}</b></span>${url ? `<a href="${url}" target="_blank" rel="noopener">Segui il pacco</a>` : ''}</div>` : ''}
+      </article>`;
+    }).join('');
+  }
+  function esc(s) { return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  document.querySelector('[data-logout]').addEventListener('click', () => { logout(); location.href = 'index.html'; });
+  window.addEventListener('storage', () => location.reload());
+</script>
+</body>
+</html>

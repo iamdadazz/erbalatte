@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registrati · Erbalatte</title>
+<meta name="description" content="Crea il tuo account Erbalatte: ordini più veloci, storico e tracking delle spedizioni.">
+<meta name="theme-color" content="#509A48">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/erbalatte.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .auth-art { position: sticky; top: 0; height: 100vh; }
+  @media (max-width: 900px) { .auth-art { position: relative; height: auto; } }
+</style>
+</head>
+<body>
+<script src="assets/js/chrome.js" data-part="header" data-page="account"></script>
+
+<main id="main" class="auth">
+  <div class="auth-art" aria-hidden="true">
+    <img src="assets/img/farm.jpg" alt="" style="object-position:40% 40%">
+    <blockquote>Crea il tuo account e ricevi Erbalatte <b>direttamente a casa.</b></blockquote>
+  </div>
+  <div class="auth-main">
+    <div class="auth-card">
+      <h1>Registrati</h1>
+      <p class="lede">Ordini più veloci, lo storico dei tuoi acquisti e il tracking di ogni spedizione.</p>
+      <div class="form-error" role="alert" data-error></div>
+      <form data-register novalidate>
+        <fieldset class="form-step">
+          <legend><span>1</span>Chi sei</legend>
+          <div class="seg2" role="radiogroup" aria-label="Tipo di cliente">
+            <label><input type="radio" name="type" value="privato" checked>Privato</label>
+            <label><input type="radio" name="type" value="azienda">Azienda o professionista</label>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="r-first">Nome</label><input id="r-first" name="firstName" autocomplete="given-name" required><span class="err">Inserisci il nome.</span></div>
+            <div class="field"><label for="r-last">Cognome</label><input id="r-last" name="lastName" autocomplete="family-name" required><span class="err">Inserisci il cognome.</span></div>
+          </div>
+          <div class="biz" hidden data-biz>
+            <div class="field"><label for="r-company">Ragione sociale</label><input id="r-company" name="company" autocomplete="organization"><span class="err">Inserisci la ragione sociale.</span></div>
+            <div class="row2">
+              <div class="field"><label for="r-vat">Partita IVA</label><input id="r-vat" name="vat" inputmode="numeric" pattern="[0-9]{11}" maxlength="11" placeholder="11 cifre"><span class="err">La partita IVA ha 11 cifre.</span></div>
+              <div class="field"><label for="r-sdi">Codice SDI o PEC</label><input id="r-sdi" name="sdi" placeholder="Per la fattura elettronica"><span class="err">Serve per la fattura elettronica.</span></div>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="r-email">Email</label><input id="r-email" name="email" type="email" autocomplete="email" required placeholder="maria@esempio.it"><span class="err">Inserisci un'email valida.</span></div>
+            <div class="field"><label for="r-phone">Telefono</label><input id="r-phone" name="phone" type="tel" autocomplete="tel" required pattern="[0-9 +]{6,}" placeholder="333 123 4567"><span class="err">Il corriere ti chiama se serve.</span></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-step">
+          <legend><span>2</span>Dove spediamo</legend>
+          <div class="row2" style="grid-template-columns:1fr 110px">
+            <div class="field"><label for="r-street">Via</label><input id="r-street" name="street" autocomplete="address-line1" required placeholder="Via Roma"><span class="err">Inserisci la via.</span></div>
+            <div class="field"><label for="r-num">Civico</label><input id="r-num" name="number" required placeholder="12"><span class="err">Civico.</span></div>
+          </div>
+          <div class="row3">
+            <div class="field"><label for="r-cap">CAP</label><input id="r-cap" name="cap" inputmode="numeric" autocomplete="postal-code" required pattern="[0-9]{5}" maxlength="5" placeholder="12030"><span class="err">5 cifre.</span></div>
+            <div class="field"><label for="r-city">Città</label><input id="r-city" name="city" autocomplete="address-level2" required placeholder="Savigliano"><span class="err">Inserisci la città.</span></div>
+            <div class="field"><label for="r-prov">Prov.</label><input id="r-prov" name="prov" required maxlength="2" pattern="[A-Za-z]{2}" placeholder="CN" style="text-transform:uppercase"><span class="err">Sigla.</span></div>
+          </div>
+          <div class="field"><label for="r-notes">Note per il corriere <span class="muted" style="font-weight:400">(facoltativo)</span></label><input id="r-notes" name="notes" placeholder="Es. citofono Rossi, consegna al mattino"></div>
+        </fieldset>
+
+        <fieldset class="form-step">
+          <legend><span>3</span>La tua password</legend>
+          <div class="field"><label for="r-pw">Password</label>
+            <div class="pw-wrap"><input id="r-pw" name="password" type="password" autocomplete="new-password" required minlength="8" aria-describedby="pw-hint"><button type="button" data-show="r-pw">Mostra</button></div>
+            <div class="meter" aria-hidden="true"><i data-meter></i></div>
+            <span class="hint" id="pw-hint" data-pw-hint>Almeno 8 caratteri, meglio con numeri e maiuscole.</span>
+            <span class="err">La password ha almeno 8 caratteri.</span></div>
+          <div class="field"><label for="r-pw2">Ripeti la password</label><input id="r-pw2" name="password2" type="password" autocomplete="new-password" required><span class="err">Le due password non coincidono.</span></div>
+        </fieldset>
+
+        <label class="check"><input type="checkbox" name="terms" required><span>Accetto i <a href="#">termini e condizioni di vendita</a>.</span></label>
+        <label class="check"><input type="checkbox" name="privacy" required><span>Ho letto l'<a href="#">informativa privacy</a>.</span></label>
+        <label class="check" style="margin-bottom:22px"><input type="checkbox" name="newsletter"><span>Voglio ricevere le novità dalla Corte: nuovi prodotti, eventi e offerte. <span class="muted">(facoltativo)</span></span></label>
+        <button class="btn btn--block" type="submit">Crea il mio account</button>
+      </form>
+      <p class="auth-alt">Hai già un account? <a href="accedi.html">Accedi</a></p>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+  import { register, currentUser } from './assets/js/store.js';
+  if (currentUser()) location.replace('account.html');
+  const form = document.querySelector('[data-register]');
+  const err = document.querySelector('[data-error]');
+  const biz = document.querySelector('[data-biz]');
+
+  form.addEventListener('change', (e) => {
+    if (e.target.name !== 'type') return;
+    const on = e.target.value === 'azienda';
+    biz.hidden = !on;
+    ['company', 'vat', 'sdi'].forEach((n) => { form.elements[n].required = on; });
+  });
+  document.querySelectorAll('[data-show]').forEach((b) => b.addEventListener('click', () => {
+    const i = document.getElementById(b.dataset.show); const show = i.type === 'password';
+    i.type = show ? 'text' : 'password'; b.textContent = show ? 'Nascondi' : 'Mostra';
+  }));
+  const meter = document.querySelector('[data-meter]');
+  const hint = document.querySelector('[data-pw-hint]');
+  form.password.addEventListener('input', () => {
+    const v = form.password.value;
+    const score = (v.length >= 8) + /[A-Z]/.test(v) + /[0-9]/.test(v) + /[^A-Za-z0-9]/.test(v) + (v.length >= 12);
+    const lv = [['', 'Almeno 8 caratteri, meglio con numeri e maiuscole.', '#D0302C'], ['Debole', 'Aggiungi numeri o maiuscole.', '#D0302C'], ['Discreta', 'Ancora un numero o un simbolo.', '#E3A21A'], ['Buona', 'Buona password.', '#6FB165'], ['Ottima', 'Ottima password.', '#3F8438'], ['Ottima', 'Ottima password.', '#3F8438']][score];
+    meter.style.setProperty('--k', score / 5); meter.style.setProperty('--c', lv[2]);
+    hint.textContent = lv[1];
+  });
+  form.addEventListener('input', (e) => { if (e.target.getAttribute('aria-invalid') === 'true' && e.target.checkValidity()) e.target.removeAttribute('aria-invalid'); });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.classList.remove('is-on');
+    form.password2.setCustomValidity(form.password2.value && form.password2.value !== form.password.value ? 'mismatch' : '');
+    let bad = null;
+    form.querySelectorAll('input').forEach((i) => {
+      if (i.type === 'radio') return;
+      const ok = i.checkValidity();
+      if (i.type !== 'checkbox') i.setAttribute('aria-invalid', String(!ok));
+      if (!ok && !bad) bad = i;
+    });
+    if (bad) {
+      if (bad.type === 'checkbox') { err.textContent = 'Per creare l\'account accetta i termini e l\'informativa privacy.'; err.classList.add('is-on'); }
+      bad.focus(); return;
+    }
+    const data = Object.fromEntries(new FormData(form));
+    data.prov = (data.prov || '').toUpperCase();
+    data.newsletter = !!data.newsletter;
+    delete data.terms; delete data.privacy;
+    try {
+      await register(data);
+      location.href = 'account.html?benvenuto';
+    } catch {
+      err.innerHTML = 'Esiste già un account con questa email. <a href="accedi.html">Accedi</a>.';
+      err.classList.add('is-on');
+      form.email.focus();
+    }
+  });
+</script>
+</body>
+</html>

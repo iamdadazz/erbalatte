@@ -119,6 +119,64 @@
   .demo-banner { display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-radius: 12px; background: #FFF5D6; color: #5E4600; font-size: .86rem; margin-bottom: 18px; }
   .demo-banner svg { width: 18px; flex: none; }
 
+
+  .search { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px var(--line-strong); }
+  .search svg { width: 17px; color: var(--ink-3); }
+  .search input { border: 0; background: none; width: 220px; font-size: .9rem; }
+  .search input:focus { outline: none; }
+  .search:focus-within { box-shadow: inset 0 0 0 1.5px var(--green), 0 0 0 3px rgba(80,154,72,.15); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 16px; }
+  .chips button { border: 0; background: #fff; box-shadow: inset 0 0 0 1px var(--line); padding: 7px 14px; border-radius: 999px; font-size: .84rem; color: var(--ink-2); }
+  .chips button b { font-weight: 600; margin-left: 4px; color: var(--ink-3); }
+  .chips button[aria-pressed="true"] { background: var(--green-600); color: #fff; box-shadow: none; }
+  .chips button[aria-pressed="true"] b { color: #fff; }
+  .t-click tbody tr { cursor: pointer; }
+  .t-click tbody tr:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+  .t .muted-cell { color: var(--ink-3); font-size: .86rem; }
+  .new-row td { animation: flash 2.4s ease-out; }
+  @keyframes flash { from { background: #FFF5D6; } }
+  .a-scrim { position: fixed; inset: 0; z-index: 90; background: rgba(30,42,28,.3); opacity: 0; visibility: hidden; transition: opacity .35s, visibility 0s .35s; }
+  .a-scrim.is-open { opacity: 1; visibility: visible; transition: opacity .35s; }
+  .a-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 95; width: min(560px, 100vw); background: #fff; box-shadow: -30px 0 80px -30px rgba(30,42,28,.45); display: flex; flex-direction: column; transform: translateX(100%); visibility: hidden; transition: transform .5s var(--ease-out), visibility 0s .5s; }
+  .a-drawer.is-open { transform: none; visibility: visible; transition: transform .5s var(--ease-out); }
+  .a-drawer-h { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--line); }
+  .a-drawer-h h2 { font-size: 1.4rem; font-weight: 300; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .a-drawer-b { flex: 1; overflow-y: auto; padding: 20px 24px 40px; display: grid; gap: 18px; align-content: start; overscroll-behavior: contain; }
+  .box { border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line); padding: 16px 18px; }
+  .box h3 { font-size: .78rem; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 10px; }
+  .box p { margin: 0; }
+  .box-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ship-form { display: grid; gap: 12px; }
+  .ship-form .field { margin: 0; }
+  .ship-form select, .ship-form input { min-height: 44px; }
+  .track-link { font-size: .84rem; color: var(--ink-3); word-break: break-all; }
+  .track-link a { color: var(--green-600); }
+  .notify { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; color: var(--ink-2); }
+  .notify input { width: 18px; height: 18px; accent-color: var(--green-600); margin-top: 2px; }
+  .timeline { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .timeline li { display: grid; grid-template-columns: 14px 1fr auto; gap: 10px; align-items: baseline; font-size: .88rem; }
+  .timeline li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px var(--mint-100); }
+  .timeline small { color: var(--ink-3); }
+  .mail { border-radius: 14px; background: var(--mint-50); box-shadow: inset 0 0 0 1px var(--mint-100); padding: 12px 14px; font-size: .86rem; }
+  .mail + .mail { margin-top: 8px; }
+  .mail summary { cursor: pointer; display: flex; justify-content: space-between; gap: 10px; font-weight: 500; }
+  .mail summary small { color: var(--ink-3); font-weight: 400; white-space: nowrap; }
+  .mail pre { white-space: pre-wrap; font: inherit; margin: 10px 0 0; color: var(--ink-2); }
+  .email-card { border-radius: 16px; box-shadow: var(--shadow-sign), inset 0 0 0 1px var(--line); overflow: hidden; background: #fff; }
+  .email-card.mail-sent { animation: pop .6s var(--ease-out); box-shadow: var(--shadow-sign), inset 0 0 0 1.5px var(--green); }
+  .email-card header { padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: .84rem; color: var(--ink-3); }
+  .email-card header b { color: var(--ink); font-weight: 600; display: block; font-size: .98rem; margin-top: 2px; }
+  .email-card .em-logo { padding: 18px 18px 0; }
+  .email-card .em-logo img { height: 34px; }
+  .email-card pre { white-space: pre-wrap; font: inherit; font-size: .92rem; color: var(--ink-2); padding: 14px 18px 20px; margin: 0; }
+  .tpl { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .tpl:last-child { border-bottom: 0; }
+  .tpl:hover, .tpl[aria-current="true"] { background: var(--mint-50); }
+  .tpl:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+  .tpl b { font-weight: 500; flex: 1; font-size: .9rem; }
+  .tpl small { color: var(--ink-3); }
+  @media (max-width: 820px) { .search input { width: 140px; } .box-2 { grid-template-columns: 1fr; } }
+
   [role="tabpanel"][hidden] { display: none; }
   .mobile-tabs { display: none; }
 
@@ -140,15 +198,16 @@
   <aside class="side" role="tablist" aria-label="Sezioni amministrazione" aria-orientation="vertical">
     <div class="logo"><img src="assets/img/erbalatte.png" alt="erbalatte"><span>Admin</span></div>
     <button role="tab" id="tab-home" aria-controls="p-home" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Panoramica</button>
-    <button role="tab" id="tab-orders" aria-controls="p-orders" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></svg>Ordini<span class="badge">3</span></button>
+    <button role="tab" id="tab-orders" aria-controls="p-orders" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></svg>Ordini<span class="badge" data-badge hidden></span></button>
     <button role="tab" id="tab-products" aria-controls="p-products" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h8v14H8zM8 7l1.5-3h5L16 7M11 2h2"/></svg>Prodotti e prezzi</button>
+    <button role="tab" id="tab-customers" aria-controls="p-customers" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.8-3 3.2-4.6 6-4.6s5.2 1.6 6 4.6M16 4.8a3.2 3.2 0 010 6.4M21 19c-.5-2-1.7-3.4-3.4-4.1"/></svg>Clienti</button>
     <button role="tab" id="tab-b2b" aria-controls="p-b2b" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16v12H4zM9 8V5h6v3M4 13h16"/></svg>Richieste B2B</button>
-    <button role="tab" id="tab-settings" aria-controls="p-settings" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Pagamenti e spedizioni</button>
+    <button role="tab" id="tab-settings" aria-controls="p-settings" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>Email e pagamenti</button>
     <div class="foot">Mockup dell'area riservata.<br><a href="index.html">Torna al sito</a></div>
   </aside>
 
   <main class="main" id="main">
-    <div class="demo-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5" stroke-linecap="round"/></svg><span>Anteprima: ordini e statistiche sono dati dimostrativi. Prezzi e disponibilità modificati qui si aggiornano davvero nel negozio di questo browser.</span></div>
+    <div class="demo-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5" stroke-linecap="round"/></svg><span>Anteprima funzionante in questo browser: prezzi, scorte, ordini e clienti sono salvati localmente. Gli ordini fatti nel negozio compaiono qui; le email ai clienti sono simulate e visibili in anteprima.</span></div>
 
     <!-- ======== PRODUCTS & PRICES ======== -->
     <section role="tabpanel" id="p-products" aria-labelledby="tab-products">
@@ -194,23 +253,33 @@
 
     <!-- ======== OVERVIEW ======== -->
     <section role="tabpanel" id="p-home" aria-labelledby="tab-home" hidden>
-      <div class="bar"><h1>Panoramica</h1><span class="spacer"></span><span class="status">Settembre 2026</span></div>
+      <div class="bar"><h1>Panoramica</h1></div>
       <div class="kpis">
-        <div class="panel kpi"><small>Ordini del mese</small><b>64</b><span class="delta">+12% su agosto</span></div>
-        <div class="panel kpi"><small>Litri venduti</small><b>3.456</b><span class="delta">+9% su agosto</span></div>
-        <div class="panel kpi"><small>Incasso</small><b>9.214 €</b><span class="delta">+11% su agosto</span></div>
-        <div class="panel kpi"><small>Casse in magazzino</small><b data-kpi-stock>141</b><span class="delta" style="color:var(--ink-2)">dato reale del catalogo</span></div>
+        <div class="panel kpi"><small>Ordini da evadere</small><b data-k="todo">0</b><span class="delta">pagati o in preparazione</span></div>
+        <div class="panel kpi"><small>In viaggio</small><b data-k="ship">0</b><span class="delta">spediti o in consegna</span></div>
+        <div class="panel kpi"><small>Incasso ordini</small><b data-k="rev">0 €</b><span class="delta">esclusi gli annullati</span></div>
+        <div class="panel kpi"><small>Casse in magazzino</small><b data-kpi-stock>141</b><span class="delta">dal catalogo</span></div>
       </div>
       <div class="panel">
-        <div class="panel-h"><div><h2>Ultimi ordini</h2></div><button class="btn btn-sm btn-quiet" type="button" data-goto="tab-orders">Tutti gli ordini</button></div>
+        <div class="panel-h"><div><h2>Da evadere</h2><p>Gli ordini pagati che aspettano di partire.</p></div><button class="btn btn-sm btn-quiet" type="button" data-goto="tab-orders">Tutti gli ordini</button></div>
         <div class="t-wrap"><table class="t" data-orders-mini></table></div>
       </div>
     </section>
 
     <!-- ======== ORDERS ======== -->
     <section role="tabpanel" id="p-orders" aria-labelledby="tab-orders" hidden>
-      <div class="bar"><h1>Ordini</h1><span class="spacer"></span><button class="btn btn-sm btn-quiet" type="button">Esporta CSV</button></div>
-      <div class="panel"><div class="t-wrap"><table class="t" data-orders></table></div></div>
+      <div class="bar"><h1>Ordini</h1><span class="spacer"></span>
+        <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input type="search" placeholder="Cerca ordine, cliente, città" data-search aria-label="Cerca negli ordini"></label>
+        <button class="btn btn-sm btn-quiet" type="button" data-csv>Esporta CSV</button>
+      </div>
+      <div class="chips" role="group" aria-label="Filtra per stato" data-chips></div>
+      <div class="panel"><div class="t-wrap"><table class="t t-click" data-orders></table></div></div>
+    </section>
+
+    <!-- ======== CUSTOMERS ======== -->
+    <section role="tabpanel" id="p-customers" aria-labelledby="tab-customers" hidden>
+      <div class="bar"><h1>Clienti</h1><span class="spacer"></span><span class="status ok"><i></i>Registrazioni dal sito</span></div>
+      <div class="panel"><div class="t-wrap"><table class="t" data-customers></table></div></div>
     </section>
 
     <!-- ======== B2B ======== -->
@@ -230,20 +299,32 @@
 
     <!-- ======== SETTINGS ======== -->
     <section role="tabpanel" id="p-settings" aria-labelledby="tab-settings" hidden>
-      <div class="bar"><h1>Pagamenti e spedizioni</h1></div>
-      <div class="panel">
-        <div class="empty-tab">
-          <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="14" width="44" height="30" rx="5"/><path d="M6 23h44M14 35h10"/></svg>
-          <b>Stripe arriva nella fase 2</b>
-          Qui collegherai l'account Stripe (carte, Apple Pay, Google Pay), le email di conferma e le impostazioni del corriere.
+      <div class="bar"><h1>Email e pagamenti</h1><span class="spacer"></span><span class="status"><i></i>Stripe: da collegare (fase 2)</span></div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-h"><div><h2>Email automatiche ai clienti</h2><p>Partono da sole quando cambi lo stato di un ordine o inserisci il numero di spedizione.</p></div></div>
+          <div data-templates></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><div><h2>Anteprima</h2><p>Così la riceve il cliente.</p></div></div>
+          <div class="panel-b" data-tpl-preview></div>
         </div>
       </div>
     </section>
   </main>
 </div>
 
+<div class="a-scrim" data-close-order></div>
+<aside class="a-drawer" role="dialog" aria-modal="true" aria-labelledby="od-title" aria-hidden="true" data-order-drawer>
+  <div class="a-drawer-h">
+    <div><h2 id="od-title" data-od-title>Ordine</h2><small class="muted" data-od-date></small></div>
+    <button class="icon-btn" type="button" data-close-order aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="a-drawer-b" data-od-body></div>
+</aside>
+
 <script type="module">
-  import { getCatalog, saveCatalog, resetCatalog, DEFAULT_CATALOG, eur, eurL } from './assets/js/store.js';
+  import { getCatalog, saveCatalog, resetCatalog, DEFAULT_CATALOG, eur, eurL, getOrders, updateOrder, STATUSES, statusLabel, CARRIERS, trackingUrl, composeEmail, getUsers, toast } from './assets/js/store.js';
 
   /* ---------- tabs ---------- */
   const tabs = [...document.querySelectorAll('[role="tab"]')];
@@ -265,7 +346,7 @@
     });
   });
   document.querySelectorAll('[data-goto]').forEach((b) => b.addEventListener('click', () => select(document.getElementById(b.dataset.goto))));
-  select(document.getElementById('tab-products'));
+  select(document.getElementById('tab-home'));
 
   /* ---------- catalogue editing ---------- */
   let draft = structuredClone(getCatalog());
@@ -357,21 +438,158 @@
   });
   renderAll();
 
-  /* ---------- demo orders ---------- */
-  const orders = [
-    ['#1284', '23/09', 'Giulia M.', 'Torino', 'intero', 2, 'new'], ['#1283', '22/09', 'Marco R.', 'Milano', 'scremato', 1, 'paid'],
-    ['#1282', '22/09', 'Elena B.', 'Cuneo', 'intero', 6, 'ship'], ['#1281', '21/09', 'Paolo T.', 'Genova', 'intero', 3, 'ship'],
-    ['#1280', '20/09', 'Sara L.', 'Asti', 'scremato', 4, 'ship'], ['#1279', '19/09', 'Andrea F.', 'Bologna', 'intero', 1, 'ship'],
-  ];
-  const statusTxt = { new: 'Nuovo', paid: 'Pagato', ship: 'Spedito' };
-  const cat = getCatalog();
-  const row = (o) => {
-    const t = [...cat.tiers].reverse().find((x) => o[5] >= x.cases) || cat.tiers[0];
-    return `<tr><td><b>${o[0]}</b></td><td>${o[1]}</td><td>${o[2]}</td><td>${o[3]}</td><td><span class="dot-kind ${o[4] === 'scremato' ? 'rosa' : ''}"></span>${o[4] === 'intero' ? 'Intero' : 'Parz. scremato'} × ${o[5]}</td><td class="r">${eur(o[5] * 12 * t.perLitre)}</td><td><span class="pill ${o[6]}">${statusTxt[o[6]]}</span></td></tr>`;
+  /* ---------- orders: list, filters, detail drawer, shipping, emails ---------- */
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const dt = (iso, time = false) => new Date(iso).toLocaleString('it-IT', time ? { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' } : { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const tone = (id) => STATUSES.find((s) => s.id === id)?.tone || '';
+  const pill = (id) => `<span class="pill ${tone(id)}">${statusLabel(id)}</span>`;
+  const linesTxt = (o) => o.lines.map((l) => `<span class="dot-kind ${l.id === 'scremato' ? 'rosa' : ''}"></span>${l.id === 'intero' ? 'Intero' : 'Parz. scremato'} × ${l.cases}`).join('<br>');
+  let filter = 'all', query = '', openId = null;
+
+  const head = '<thead><tr><th>Ordine</th><th>Data</th><th>Cliente</th><th>Città</th><th>Prodotti</th><th class="r">Totale</th><th>Stato</th><th>Spedizione</th></tr></thead>';
+  const row = (o, fresh) => `<tr tabindex="0" data-open="${o.id}" class="${fresh ? 'new-row' : ''}"><td><b>${o.id}</b></td><td>${dt(o.createdAt)}</td><td>${esc(o.customer.name)}<br><span class="muted-cell">${esc(o.customer.email)}</span></td><td>${esc(o.address.city)}</td><td>${linesTxt(o)}</td><td class="r"><b>${eur(o.total)}</b></td><td>${pill(o.status)}</td><td class="muted-cell">${o.tracking ? `${esc(o.carrier)}<br>${esc(o.tracking)}` : '—'}</td></tr>`;
+
+  function renderOrders() {
+    const all = getOrders();
+    const counts = Object.fromEntries(STATUSES.map((s) => [s.id, all.filter((o) => o.status === s.id).length]));
+    document.querySelector('[data-chips]').innerHTML = [['all', 'Tutti', all.length], ...STATUSES.map((s) => [s.id, s.label, counts[s.id]])]
+      .filter(([id, , n]) => id === 'all' || n).map(([id, l, n]) => `<button type="button" data-chip="${id}" aria-pressed="${filter === id}">${l}<b>${n}</b></button>`).join('');
+    const q = query.trim().toLowerCase();
+    const list = all.filter((o) => (filter === 'all' || o.status === filter) && (!q || [o.id, o.customer.name, o.customer.email, o.address.city, o.tracking].join(' ').toLowerCase().includes(q)));
+    const recent = Date.now() - 60 * 60 * 1000;
+    document.querySelector('[data-orders]').innerHTML = head + '<tbody>' + (list.length ? list.map((o) => row(o, !o.demo && new Date(o.createdAt) > recent)).join('') : '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--ink-3)">Nessun ordine con questi filtri.</td></tr>') + '</tbody>';
+    const todo = all.filter((o) => ['pagato', 'preparazione'].includes(o.status));
+    document.querySelector('[data-orders-mini]').innerHTML = head + '<tbody>' + (todo.length ? todo.map((o) => row(o)).join('') : '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--ink-3)">Tutto spedito. Ottimo lavoro!</td></tr>') + '</tbody>';
+    const badge = document.querySelector('[data-badge]');
+    badge.textContent = todo.length; badge.hidden = !todo.length;
+    document.querySelector('[data-k="todo"]').textContent = todo.length;
+    document.querySelector('[data-k="ship"]').textContent = all.filter((o) => ['spedito', 'consegna'].includes(o.status)).length;
+    document.querySelector('[data-k="rev"]').textContent = eur(all.filter((o) => o.status !== 'annullato').reduce((s, o) => s + o.total, 0));
+  }
+
+  document.addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-chip]');
+    if (chip) { filter = chip.dataset.chip; renderOrders(); return; }
+    const tr = e.target.closest('[data-open]');
+    if (tr) openOrder(tr.dataset.open);
+    if (e.target.closest('[data-close-order]')) closeOrder();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.matches?.('[data-open]')) openOrder(e.target.dataset.open);
+    if (e.key === 'Escape' && openId) closeOrder();
+  });
+  document.querySelector('[data-search]').addEventListener('input', (e) => { query = e.target.value; renderOrders(); });
+  document.querySelector('[data-csv]').addEventListener('click', () => {
+    const rows = [['Ordine', 'Data', 'Cliente', 'Email', 'Telefono', 'Indirizzo', 'CAP', 'Città', 'Prov', 'Casse', 'Totale', 'Stato', 'Corriere', 'Tracking']]
+      .concat(getOrders().map((o) => [o.id, dt(o.createdAt), o.customer.name, o.customer.email, o.customer.phone, o.address.street, o.address.cap, o.address.city, o.address.prov, o.cases, o.total.toFixed(2).replace('.', ','), statusLabel(o.status), o.carrier, o.tracking]));
+    const csv = rows.map((r) => r.map((c) => `"${String(c ?? '').replace(/"/g, '""')}"`).join(';')).join('\n');
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })), download: 'ordini-erbalatte.csv' });
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+
+  const drawer = document.querySelector('[data-order-drawer]');
+  const scrim = document.querySelector('.a-scrim');
+  let lastFocusEl = null;
+  function openOrder(id) {
+    openId = id; lastFocusEl = document.activeElement;
+    renderDrawer();
+    drawer.classList.add('is-open'); scrim.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    setTimeout(() => drawer.querySelector('select')?.focus(), 80);
+  }
+  function closeOrder() {
+    openId = null;
+    drawer.classList.remove('is-open'); scrim.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    lastFocusEl?.focus?.();
+  }
+
+  function renderDrawer(sentEmail) {
+    const o = getOrders().find((x) => x.id === openId);
+    if (!o) return;
+    document.querySelector('[data-od-title]').innerHTML = `Ordine ${o.id} ${pill(o.status)}`;
+    document.querySelector('[data-od-date]').textContent = `Ricevuto il ${new Date(o.createdAt).toLocaleString('it-IT', { dateStyle: 'long', timeStyle: 'short' })}`;
+    const url = trackingUrl(o.carrier, o.tracking);
+    document.querySelector('[data-od-body]').innerHTML = `
+      <div class="box-2">
+        <div class="box"><h3>Cliente</h3><p><b>${esc(o.customer.name)}</b><br><a href="mailto:${esc(o.customer.email)}">${esc(o.customer.email)}</a><br>${esc(o.customer.phone || '')}</p></div>
+        <div class="box"><h3>Spedire a</h3><p>${esc(o.address.street)}<br>${esc(o.address.cap)} ${esc(o.address.city)} ${o.address.prov ? `(${esc(o.address.prov)})` : ''}</p></div>
+      </div>
+      <div class="box"><h3>Prodotti</h3><p>${linesTxt(o)}</p><p style="margin-top:10px;display:flex;justify-content:space-between"><span class="muted">${o.cases * 12} litri · ${eurL(o.perLitre)} · spedizione gratuita</span><b>${eur(o.total)}</b></p></div>
+
+      <form class="box ship-form" data-ship>
+        <h3>Stato e spedizione</h3>
+        <div class="field"><label for="od-status">Stato dell'ordine</label>
+          <select id="od-status" name="status">${STATUSES.map((s) => `<option value="${s.id}" ${s.id === o.status ? 'selected' : ''}>${s.label}</option>`).join('')}</select></div>
+        <div class="row2">
+          <div class="field"><label for="od-carrier">Corriere</label>
+            <select id="od-carrier" name="carrier"><option value="">Scegli…</option>${Object.keys(CARRIERS).map((c) => `<option ${c === o.carrier ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+          <div class="field"><label for="od-track">Numero di spedizione</label><input id="od-track" name="tracking" value="${esc(o.tracking)}" placeholder="Es. 1234567890" autocomplete="off"></div>
+        </div>
+        <span class="track-link" data-track-preview>${url ? `Link di tracking: <a href="${url}" target="_blank" rel="noopener">${url}</a>` : 'Il link di tracking si genera da corriere e numero.'}</span>
+        <div class="field"><label for="od-note">Nota per lo storico <span class="muted" style="font-weight:400">(facoltativa, non va al cliente)</span></label><input id="od-note" name="note" placeholder="Es. ritiro BRT ore 15"></div>
+        <label class="notify"><input type="checkbox" name="notify" checked><span>Invia l'email automatica al cliente (${esc(o.customer.email)})</span></label>
+        <button class="btn" type="submit">Salva aggiornamento</button>
+      </form>
+
+      ${sentEmail ? `<div><div class="box" style="box-shadow:none;padding:0"><h3>Email appena inviata</h3></div>${emailCard(sentEmail)}</div>` : ''}
+
+      <div class="box"><h3>Storico</h3><ol class="timeline">${[...o.history].reverse().map((h) => `<li><span>${statusLabel(h.status)}${h.note ? ` · <span class="muted">${esc(h.note)}</span>` : ''}</span><small>${dt(h.at, true)}</small></li>`).join('')}</ol></div>
+      <div class="box"><h3>Email al cliente</h3>${o.emails.length ? [...o.emails].reverse().map((m, i) => `<details class="mail"><summary>${esc(m.subject)}<small>${dt(m.at, true)}</small></summary><pre>${esc(m.body)}</pre></details>`).join('') : '<p class="muted" style="font-size:.88rem">Nessuna email inviata per questo ordine.</p>'}</div>`;
+
+    const f = drawer.querySelector('[data-ship]');
+    const prev = drawer.querySelector('[data-track-preview]');
+    const upd = () => { const u = trackingUrl(f.carrier.value, f.tracking.value.trim()); prev.innerHTML = u ? `Link di tracking: <a href="${u}" target="_blank" rel="noopener">${u}</a>` : 'Il link di tracking si genera da corriere e numero.'; };
+    f.carrier.addEventListener('change', upd); f.tracking.addEventListener('input', upd);
+    // shipping a parcel without its number is the most common slip: nudge before saving
+    f.status.addEventListener('change', () => { if (['spedito', 'consegna'].includes(f.status.value) && !f.tracking.value.trim()) f.tracking.focus(); });
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (['spedito', 'consegna'].includes(f.status.value) && (!f.tracking.value.trim() || !f.carrier.value)) {
+        toast('Per segnare l\'ordine come spedito inserisci corriere e numero di spedizione.');
+        (f.carrier.value ? f.tracking : f.carrier).focus();
+        return;
+      }
+      const email = updateOrder(o.id, { status: f.status.value, carrier: f.carrier.value, tracking: f.tracking.value.trim(), note: f.note.value.trim() }, { notify: f.notify.checked });
+      renderOrders();
+      renderDrawer(email);
+      toast(email ? `Aggiornato. Email inviata a ${o.customer.email}` : 'Ordine aggiornato. Nessuna email inviata.');
+    });
+  }
+
+  function emailCard(m) {
+    return `<article class="email-card mail-sent"><header>A: ${esc(m.to)}<b>${esc(m.subject)}</b></header><div class="em-logo"><img src="assets/img/erbalatte.png" alt="erbalatte"></div><pre>${esc(m.body)}</pre></article>`;
+  }
+
+  /* ---------- customers ---------- */
+  function renderCustomers() {
+    const users = getUsers();
+    const orders = getOrders();
+    document.querySelector('[data-customers]').innerHTML = '<thead><tr><th>Cliente</th><th>Contatti</th><th>Indirizzo</th><th>Tipo</th><th>Newsletter</th><th class="r">Ordini</th><th>Registrato</th></tr></thead><tbody>' +
+      (users.length ? users.map((u) => {
+        const n = orders.filter((o) => o.customer.email.toLowerCase() === u.email).length;
+        return `<tr><td><b>${esc(u.firstName)} ${esc(u.lastName)}</b>${u.company ? `<br><span class="muted-cell">${esc(u.company)} · P.IVA ${esc(u.vat)}</span>` : ''}</td><td>${esc(u.email)}<br><span class="muted-cell">${esc(u.phone)}</span></td><td>${esc(u.street)} ${esc(u.number)}<br><span class="muted-cell">${esc(u.cap)} ${esc(u.city)} (${esc(u.prov)})</span></td><td>${u.type === 'azienda' ? 'Azienda' : 'Privato'}</td><td>${u.newsletter ? 'Sì' : 'No'}</td><td class="r">${n}</td><td>${dt(u.createdAt)}</td></tr>`;
+      }).join('') : '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--ink-3)">Ancora nessun cliente registrato. Prova da <a href="registrati.html" target="_blank">registrati.html</a>: compare qui subito.</td></tr>') + '</tbody>';
+  }
+
+  /* ---------- email templates ---------- */
+  const sample = { id: 'EL-1290', customer: { name: 'Maria Rossi', email: 'maria@esempio.it' }, lines: [{ id: 'intero', cases: 2 }], total: 66.96, carrier: 'BRT', tracking: '1234567890' };
+  const tplBox = document.querySelector('[data-templates]');
+  const kinds = [...STATUSES.map((s) => [s.id, s.label]), ['tracking', 'Numero di spedizione aggiornato']];
+  tplBox.innerHTML = kinds.map(([k, l], i) => `<div class="tpl" role="button" tabindex="0" data-tpl="${k}" aria-current="${i === 1}"><span class="pill ${tone(k) || 'ship'}">${l}</span><b>${esc(composeEmail(sample, k).subject)}</b><small>auto</small></div>`).join('');
+  const showTpl = (k) => {
+    tplBox.querySelectorAll('.tpl').forEach((t) => t.setAttribute('aria-current', String(t.dataset.tpl === k)));
+    document.querySelector('[data-tpl-preview]').innerHTML = emailCard(composeEmail(sample, k));
   };
-  const head = '<thead><tr><th>Ordine</th><th>Data</th><th>Cliente</th><th>Città</th><th>Prodotto</th><th class="r">Totale</th><th>Stato</th></tr></thead>';
-  document.querySelector('[data-orders]').innerHTML = head + '<tbody>' + orders.map(row).join('') + '</tbody>';
-  document.querySelector('[data-orders-mini]').innerHTML = head + '<tbody>' + orders.slice(0, 4).map(row).join('') + '</tbody>';
+  tplBox.addEventListener('click', (e) => { const t = e.target.closest('[data-tpl]'); if (t) showTpl(t.dataset.tpl); });
+  tplBox.addEventListener('keydown', (e) => { const t = e.target.closest('[data-tpl]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); showTpl(t.dataset.tpl); } });
+  showTpl('pagato');
+
+  renderOrders();
+  renderCustomers();
+  addEventListener('orders:change', () => { renderOrders(); renderCustomers(); });
+  addEventListener('storage', () => { renderOrders(); renderCustomers(); if (openId) renderDrawer(); });
+  if (location.hash === '#ordini') select(document.getElementById('tab-orders'));
 </script>
 </body>
 </html>
