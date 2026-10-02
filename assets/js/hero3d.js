@@ -58,6 +58,23 @@ export function initHero(stage) {
     return { mesh: b, phase: i * 2.6, rad: 1.5 + i * 0.5, h: 0.9 + i * 0.25, speed: 0.6 + i * 0.15 };
   });
 
+  // pollen drifting over the meadow, catching the light
+  const dot = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const x = c.getContext('2d'), g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.35, 'rgba(255,248,214,.55)'); g.addColorStop(1, 'rgba(255,248,214,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+    return new THREE.CanvasTexture(c);
+  })();
+  const NP = small ? 40 : 80;
+  const pGeo = new THREE.BufferGeometry();
+  const pBase = new Float32Array(NP * 3), pSeed = new Float32Array(NP);
+  for (let i = 0; i < NP; i++) { const a = Math.random() * Math.PI * 2, r = Math.random() * R * 1.1; pBase.set([Math.cos(a) * r, Math.random() * 2.6, Math.sin(a) * r], i * 3); pSeed[i] = Math.random() * 100; }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pBase.slice(), 3));
+  const pollen = new THREE.Points(pGeo, new THREE.PointsMaterial({ map: dot, color: 0xfff1b8, size: 0.07, transparent: true, depthWrite: false }));
+  pollen.frustumCulled = false;
+  world.add(pollen);
+
   let dist = 11;
   function resize() {
     const w = stage.clientWidth, h = stage.clientHeight;
@@ -85,15 +102,35 @@ export function initHero(stage) {
   }).observe(stage);
 
   const clock = new THREE.Clock();
+  const gaze = new THREE.Vector3();
+  let intro = reduced ? 1 : 0;
+  const backOut = (k) => 1 + 2.2 * Math.pow(k - 1, 3) + 1.2 * Math.pow(k - 1, 2);
   function frame(dt) {
     t += dt;
+    // entrance: the meadow rises and settles with a soft overshoot
+    intro = Math.min(1, intro + dt / 1.5);
+    const k = backOut(intro);
+    world.scale.setScalar(0.82 + 0.18 * k);
+    world.position.y = (1 - k) * -0.5;
     uniforms.uTime.value = t;
     px += (tx - px) * Math.min(1, dt * 3);
     py += (ty - py) * Math.min(1, dt * 3);
     // 9s rhythm: look up at you 4s, then graze 5s; always looks up while the pointer is on her
     const hovering = Math.abs(tx) + Math.abs(ty) > 0.01;
     const graze = hovering ? 0 : (t % 9) < 4 ? 0 : 1;
-    cow.update(dt, { graze, look: px * 0.9 });
+    // when she looks up she meets your eyes, and follows the pointer
+    gaze.set(camera.position.x + px * 3, camera.position.y - py * 1.5, camera.position.z);
+    cow.update(dt, { graze, look: px * 0.9, lookAt: graze ? null : gaze });
+    if (!reduced) {
+      const pa = pGeo.attributes.position;
+      for (let i = 0; i < NP; i++) {
+        const sd = pSeed[i];
+        pa.array[i * 3] = pBase[i * 3] + Math.sin(t * 0.23 + sd) * 0.3;
+        pa.array[i * 3 + 1] = (pBase[i * 3 + 1] + t * 0.07 + Math.sin(t * 0.6 + sd) * 0.06) % 2.6;
+        pa.array[i * 3 + 2] = pBase[i * 3 + 2] + Math.cos(t * 0.19 + sd * 1.3) * 0.3;
+      }
+      pa.needsUpdate = true;
+    }
     bees.forEach((b) => {
       const a = t * b.speed + b.phase;
       b.mesh.position.set(Math.cos(a) * b.rad, b.h + Math.sin(a * 3) * 0.15, Math.sin(a * 1.3) * b.rad * 0.7);

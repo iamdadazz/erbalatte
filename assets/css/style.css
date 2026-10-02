@@ -271,20 +271,24 @@ p { margin: 0 0 1em; }
 @media (max-width: 900px) { .split { grid-template-columns: 1fr; } .split .photo { aspect-ratio: 4 / 3; } .split.rev .photo { order: -1; } }
 
 /* ---------- Story teaser steps ---------- */
-.journey { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; counter-reset: j; }
-.journey a {
-  position: relative; display: flex; flex-direction: column; gap: 14px; padding: 22px 18px 20px;
-  border-radius: var(--r-md); background: #fff; box-shadow: inset 0 0 0 1px var(--line); text-decoration: none;
-  transition: transform .5s var(--ease-out), box-shadow .5s var(--ease-out);
+/* a single route across the page: a line, six stops, the number does the talking */
+.journey { display: grid; grid-template-columns: repeat(6, 1fr); counter-reset: j; position: relative; margin-top: 8px; }
+.journey::before { content: ""; position: absolute; left: 0; right: 0; top: 52px; height: 2px; background: linear-gradient(90deg, var(--green) 0%, var(--sage) 70%, var(--mint) 100%); border-radius: 2px; }
+.journey a { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 0 22px 8px 0; text-decoration: none; color: inherit; }
+.journey a::before { counter-increment: j; content: counter(j, decimal-leading-zero); font-size: 2.4rem; font-weight: 300; letter-spacing: -.03em; line-height: 1; color: var(--green-600); font-variant-numeric: tabular-nums; margin-bottom: 30px; transition: transform .5s var(--ease-out); }
+.journey a::after { content: ""; position: absolute; left: 0; top: 46px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px var(--green); transition: transform .4s var(--ease-out), background .3s; }
+.journey a:hover::after { transform: scale(1.35); background: var(--green); }
+.journey a:hover::before { transform: translateX(4px); }
+.journey b { font-weight: 600; font-size: 1rem; }
+.journey a:hover b { color: var(--green-600); }
+.journey small { color: var(--ink-3); font-size: .86rem; line-height: 1.45; max-width: 22ch; }
+@media (max-width: 1000px) {
+  .journey { grid-template-columns: 1fr 1fr; row-gap: 28px; }
+  .journey::before { display: none; }
+  .journey a::before { font-size: 1.8rem; margin-bottom: 8px; }
+  .journey a::after { display: none; }
+  .journey a { padding: 0 0 0 16px; border-left: 2px solid var(--mint); }
 }
-.journey a:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift), inset 0 0 0 1px var(--mint); color: inherit; }
-.journey .ico { width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; background: var(--mint-50); color: var(--green-600); }
-.journey .ico svg { width: 28px; height: 28px; }
-.journey b { font-weight: 600; font-size: .98rem; }
-.journey small { color: var(--ink-3); font-size: .82rem; line-height: 1.45; }
-.journey a::after { counter-increment: j; content: counter(j); position: absolute; top: 18px; right: 18px; font-size: .78rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-@media (max-width: 1000px) { .journey { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 560px) { .journey { grid-template-columns: repeat(2, 1fr); } }
 
 /* ---------- Products ---------- */
 .products { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 28px); }

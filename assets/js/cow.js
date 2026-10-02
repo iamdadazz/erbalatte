@@ -1,7 +1,8 @@
-/* The Erbalatte cow — a cute, toon-shaded Friesian.
+/* The Erbalatte cow: a cute, toon-shaded Friesian.
    Chibi proportions (big head, round body, stubby legs), glossy eyes,
    rosy cheeks, a brand-green collar with a bell, and the sensor ear tag.
-   cow.update(dt, { graze, walk, look }) drives every motion. */
+   cow.update(dt, { graze, lie, look, lookAt }) drives every motion; walking
+   is inferred from how far the root actually moved, so feet never slide. */
 
 import * as THREE from 'three';
 
@@ -36,47 +37,79 @@ function hide(offset, scale = 1.25) {
         float n = n3(vLocal * uScale + uOff);
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.07, 0.07, 0.09), smoothstep(0.6, 0.63, n));`);
   };
+  m.customProgramCacheKey = () => 'hide';
   return m;
 }
+
+/* soft toon + rim light: the coat reads as fluffy instead of flat plastic */
+function withRim(m, strength = 0.32, color = 0xffffff) {
+  const prev = m.onBeforeCompile;
+  m.onBeforeCompile = (s, r) => {
+    prev?.call(m, s, r);
+    s.uniforms.uRim = { value: new THREE.Color(color).multiplyScalar(strength) };
+    s.fragmentShader = s.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform vec3 uRim;')
+      .replace('#include <opaque_fragment>', `
+        float rimF = pow(1.0 - saturate(dot(normal, normalize(vViewPosition))), 2.6);
+        outgoingLight += uRim * rimF;
+        #include <opaque_fragment>`);
+  };
+  const baseKey = m.customProgramCacheKey?.() ?? '';
+  m.customProgramCacheKey = () => baseKey + '|rim'; // strength is a uniform, so only the shader shape matters
+  return m;
+}
+const softToon = (color, rim = 0.3) => withRim(toon(color), rim);
+
+/* tiny critically-damped spring, for secondary motion */
+const spring = (k = 60, d = 12) => ({ x: 0, v: 0, k, d, step(target, dt) { this.v += ((target - this.x) * this.k - this.v * this.d) * dt; this.x += this.v * dt; return this.x; } });
 
 export function buildCow(opts = {}) {
   // opts: { seed (patch pattern), hero (collar + bell, default true), scale }
   const seed = opts.seed ?? 0;
   const hero = opts.hero ?? true;
   const P = (a, b, c) => [a + seed * 1.7, b + seed * 0.9, c - seed * 1.3]; // per-cow patches
+  const rnd = (() => { let s = (seed + 1) * 9301 + 49297; return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; }; })();
+  const coat = (o, sc) => withRim(hide(o, sc), 0.34);
   const root = new THREE.Group();
-  const white = toon(0xfbfaf6);
-  const pink = toon(0xf4a9a8);
-  const pinkDeep = toon(0xe98b8d);
-  const dark = toon(0x2a2a2e);
-  const hoofM = toon(0x4a3b36);
-  const cream = toon(0xf2e6c9);
+  const white = softToon(0xfbfaf6, 0.34);
+  const pink = softToon(0xf4a9a8, 0.22);
+  const pinkDeep = softToon(0xe98b8d, 0.15);
+  const dark = softToon(0x2a2a2e, 0.25);
+  const hoofM = softToon(0x4a3b36, 0.12);
+  const cream = softToon(0xf2e6c9, 0.2);
 
   /* body: a round, soft bean */
   const body = new THREE.Group();
   body.position.y = 0.95;
   root.add(body);
-  const belly = new THREE.Mesh(new THREE.SphereGeometry(0.62, 40, 28), hide(P(1.3, 0.2, 4.1)));
+  const belly = new THREE.Mesh(new THREE.SphereGeometry(0.62, 48, 32), coat(P(1.3, 0.2, 4.1)));
   belly.scale.set(1.45, 1, 1.02);
   body.add(belly);
 
-  /* stubby legs */
+  /* stubby legs, now with a knee so steps lift and fold */
   const legs = [];
-  const legGeo = new THREE.CapsuleGeometry(0.15, 0.32, 6, 14);
-  [[0.52, 0.3], [0.52, -0.3], [-0.55, 0.3], [-0.55, -0.3]].forEach(([x, z], i) => {
-    const pivot = new THREE.Group();
-    pivot.position.set(x, 0.62, z);
-    const leg = new THREE.Mesh(legGeo, i % 3 === 0 ? hide(P(i * 3.1, 0.5, 1.2)) : white);
-    leg.position.y = -0.3;
-    const hoof = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.16, 0.12, 16), hoofM);
-    hoof.position.y = -0.56;
-    pivot.add(leg, hoof);
-    root.add(pivot);
-    legs.push(pivot);
+  const upperGeo = new THREE.CapsuleGeometry(0.15, 0.14, 6, 16);
+  const lowerGeo = new THREE.CapsuleGeometry(0.142, 0.16, 6, 16);
+  [[0.52, 0.3, 1], [0.52, -0.3, 1], [-0.55, 0.3, 0], [-0.55, -0.3, 0]].forEach(([x, z, front], i) => {
+    const hip = new THREE.Group();
+    hip.position.set(x, 0.62, z);
+    const legM = i % 3 === 0 ? coat(P(i * 3.1, 0.5, 1.2)) : white;
+    const upper = new THREE.Mesh(upperGeo, legM);
+    upper.position.y = -0.14;
+    const knee = new THREE.Group();
+    knee.position.y = -0.27;
+    const lower = new THREE.Mesh(lowerGeo, legM);
+    lower.position.y = -0.1;
+    const hoof = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.16, 0.12, 20), hoofM);
+    hoof.position.y = -0.29;
+    knee.add(lower, hoof);
+    hip.add(upper, knee);
+    root.add(hip);
+    legs.push({ hip, knee, front, i });
   });
 
   /* udder */
-  const udder = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 16), pink);
+  const udder = new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 18), pink);
   udder.scale.set(1.2, 0.8, 1);
   udder.position.set(-0.3, 0.46, 0);
   root.add(udder);
@@ -87,17 +120,27 @@ export function buildCow(opts = {}) {
     return t;
   });
 
-  /* tail */
+  /* tail: a three-link chain with a tuft, simulated with springs */
   const tail = new THREE.Group();
   tail.position.set(-0.88, 1.2, 0);
-  const rope = new THREE.Mesh(new THREE.CapsuleGeometry(0.03, 0.55, 4, 8), white);
-  rope.position.y = -0.3;
-  const tuft = new THREE.Mesh(new THREE.SphereGeometry(0.08, 14, 10), dark);
-  tuft.scale.set(1, 1.5, 1);
-  tuft.position.y = -0.66;
-  tail.add(rope, tuft);
   tail.rotation.z = 0.25;
   root.add(tail);
+  const tailLinks = [];
+  let parent = tail;
+  for (let k = 0; k < 3; k++) {
+    const link = new THREE.Group();
+    link.position.y = k === 0 ? 0 : -0.2;
+    const seg = new THREE.Mesh(new THREE.CapsuleGeometry(0.03 - k * 0.004, 0.16, 4, 8), white);
+    seg.position.y = -0.1;
+    link.add(seg);
+    parent.add(link);
+    tailLinks.push({ g: link, sx: spring(40, 8), sz: spring(40, 8) });
+    parent = link;
+  }
+  const tuft = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 12), dark);
+  tuft.scale.set(1, 1.5, 1);
+  tuft.position.y = -0.26;
+  parent.add(tuft);
 
   /* neck pivot → head (chibi: big) */
   const neck = new THREE.Group();
@@ -106,68 +149,75 @@ export function buildCow(opts = {}) {
   const head = new THREE.Group();
   head.position.set(0.32, 0.26, 0);
   neck.add(head);
-  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.46, 40, 30), hide(P(7.7, 0.4, 5.5), 1.6));
+  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.46, 48, 36), coat(P(7.7, 0.4, 5.5), 1.6));
   skull.scale.set(1, 0.94, 1.02);
   head.add(skull);
   // collar with the bell, in brand green
-  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.05, 12, 40), toon(0x509a48));
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.05, 14, 48), softToon(0x509a48, 0.2));
   collar.rotation.y = Math.PI / 2;
   collar.rotation.x = 0.35;
   collar.position.set(0.12, 0.02, 0);
   if (hero) neck.add(collar);
   const bell = new THREE.Group();
-  bell.position.set(0.3, -0.3, 0);
-  const bellBody = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.1, 0.14, 18), toon(0xf2c230));
-  const clapper = new THREE.Mesh(new THREE.SphereGeometry(0.035, 10, 8), toon(0xb8861a));
-  clapper.position.y = -0.08;
-  bell.add(bellBody, clapper);
+  bell.position.set(0.3, -0.24, 0);
+  const bellBody = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.1, 0.14, 24), new THREE.MeshStandardMaterial({ color: 0xf2c230, roughness: 0.28, metalness: 0.55 }));
+  bellBody.position.y = -0.06;
+  const bellRim = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.012, 8, 24), bellBody.material);
+  bellRim.rotation.x = Math.PI / 2; bellRim.position.y = -0.13;
+  const clapper = new THREE.Mesh(new THREE.SphereGeometry(0.035, 12, 10), toon(0xb8861a));
+  clapper.position.y = -0.14;
+  bell.add(bellBody, bellRim, clapper);
   if (hero) neck.add(bell);
 
-  // snout
-  const snout = new THREE.Mesh(new THREE.SphereGeometry(0.3, 32, 24), pink);
+  // snout (+ a lower lip that chews)
+  const snout = new THREE.Mesh(new THREE.SphereGeometry(0.3, 40, 28), pink);
   snout.scale.set(0.72, 0.62, 1.05);
   snout.position.set(0.33, -0.17, 0);
   head.add(snout);
   [0.1, -0.1].forEach((z) => {
-    const n = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 10), pinkDeep);
+    const n = new THREE.Mesh(new THREE.SphereGeometry(0.045, 14, 10), pinkDeep);
     n.scale.set(0.5, 1, 0.8);
     n.position.set(0.53, -0.14, z);
     head.add(n);
   });
-  // smile
-  const smile = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.012, 6, 20, Math.PI), pinkDeep);
+  const mouth = new THREE.Group();
+  mouth.position.set(0.5, -0.27, 0);
+  const smile = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.012, 8, 24, Math.PI), pinkDeep);
   smile.rotation.set(0, Math.PI / 2, Math.PI);
-  smile.position.set(0.52, -0.27, 0);
-  head.add(smile);
+  smile.position.x = 0.02;
+  mouth.add(smile);
+  head.add(mouth);
 
-  // eyes: glossy, big, with two highlights each; blink via scale.y
+  // eyes: glossy, big, two highlights; they track the camera and blink
   const eyes = [];
   [0.18, -0.18].forEach((z) => {
+    const socket = new THREE.Group();
+    socket.position.set(0.405, 0.09, z);
+    socket.lookAt(socket.position.clone().add(new THREE.Vector3(1, 0, z * 1.4)));
     const g = new THREE.Group();
-    g.position.set(0.405, 0.09, z);
-    g.lookAt(g.position.clone().add(new THREE.Vector3(1, 0, z * 1.4)));
-    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.095, 24, 18), new THREE.MeshStandardMaterial({ color: 0x141418, roughness: 0.12, metalness: 0 }));
+    socket.add(g);
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.095, 32, 24), new THREE.MeshStandardMaterial({ color: 0x141418, roughness: 0.1, metalness: 0 }));
     ball.scale.set(0.95, 1.12, 0.7);
-    const hi1 = new THREE.Mesh(new THREE.SphereGeometry(0.03, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    const hi1 = new THREE.Mesh(new THREE.SphereGeometry(0.03, 12, 10), new THREE.MeshBasicMaterial({ color: 0xffffff }));
     hi1.position.set(0.028, 0.045, 0.062);
-    const hi2 = new THREE.Mesh(new THREE.SphereGeometry(0.014, 8, 6), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    const hi2 = new THREE.Mesh(new THREE.SphereGeometry(0.014, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
     hi2.position.set(-0.03, -0.035, 0.062);
     g.add(ball, hi1, hi2);
-    head.add(g);
+    head.add(socket);
     eyes.push(g);
   });
   // rosy cheeks
   [0.3, -0.3].forEach((z) => {
-    const c = new THREE.Mesh(new THREE.CircleGeometry(0.075, 20), new THREE.MeshBasicMaterial({ color: 0xff8f9a, transparent: true, opacity: 0.55, depthWrite: false }));
+    const c = new THREE.Mesh(new THREE.CircleGeometry(0.075, 24), new THREE.MeshBasicMaterial({ color: 0xff8f9a, transparent: true, opacity: 0.55, depthWrite: false }));
     c.position.set(0.36, -0.07, z * 0.97);
     c.lookAt(c.position.clone().add(new THREE.Vector3(0.6, 0, z * 2)));
     head.add(c);
   });
-  // ears (pivot at skull), pink inside
+  // ears (pivot at skull), pink inside, floppy
   const ears = [1, -1].map((s) => {
     const p = new THREE.Group();
     p.position.set(0.0, 0.16, s * 0.4);
-    const outer = new THREE.Mesh(new THREE.SphereGeometry(0.16, 20, 14), white);
+    const outer = new THREE.Mesh(new THREE.SphereGeometry(0.16, 24, 16), white);
     outer.scale.set(0.55, 0.32, 1.1);
     outer.position.z = s * 0.14;
     const inner = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 12), pink);
@@ -176,27 +226,30 @@ export function buildCow(opts = {}) {
     p.add(outer, inner);
     p.rotation.x = s * -0.35;
     head.add(p);
-    return p;
+    return { g: p, s, sp: spring(70, 7) };
   });
   // the sensor tag: steps, rumination, rest
-  const tag = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.02, 20), toon(0xf2c230));
+  const tag = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.02, 24), softToon(0xf2c230, 0.15));
   tag.rotation.x = Math.PI / 2;
   tag.position.set(0.02, -0.06, 0.2);
-  ears[0].add(tag);
+  ears[0].g.add(tag);
   // little horns and a hair tuft
   [0.2, -0.2].forEach((z) => {
-    const h = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.14, 12), cream);
+    const h = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.14, 16), cream);
     h.position.set(-0.05, 0.42, z);
     h.rotation.x = z > 0 ? 0.35 : -0.35;
     head.add(h);
   });
+  const fringe = new THREE.Group();
+  fringe.position.set(0.05, 0.42, 0);
   for (let i = 0; i < 4; i++) {
-    const tuftH = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 10), dark);
-    tuftH.position.set(0.05 + (i % 2) * 0.06, 0.42 + (i > 1 ? 0.02 : 0), (i - 1.5) * 0.06);
-    head.add(tuftH);
+    const tuftH = new THREE.Mesh(new THREE.SphereGeometry(0.07, 14, 10), dark);
+    tuftH.position.set((i % 2) * 0.06, i > 1 ? 0.02 : 0, (i - 1.5) * 0.06);
+    fringe.add(tuftH);
   }
+  head.add(fringe);
 
-  root.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.material.toneMapped = false; } });
+  root.traverse((o) => { if (o.isMesh) o.castShadow = true; });
   // everything sits in a posture group so she can settle down on the straw
   const posture = new THREE.Group();
   [...root.children].forEach((c) => posture.add(c));
@@ -204,48 +257,115 @@ export function buildCow(opts = {}) {
   if (opts.scale) root.scale.setScalar(opts.scale);
 
   /* ---------- behaviour ---------- */
-  let t = seed * 3.7, blinkT = 2 + Math.random() * 2, graze = 0, walk = 0, lie = 0, first = true;
+  let t = seed * 3.7 + rnd() * 5, blinkT = 1 + rnd() * 3, graze = 0, lie = 0, first = true;
+  let phase = rnd() * 6, gait = 0, mooT = 6 + rnd() * 10, moo = 0, swatT = 3 + rnd() * 4, swat = 0, shakeT = 9 + rnd() * 9, shake = 0;
+  const yawS = spring(30, 10), pitchS = spring(30, 10), bellS = spring(55, 3.5), bellZ = spring(55, 3.5), headTossS = spring(80, 10);
+  const prevPos = new THREE.Vector3(), tmpV = new THREE.Vector3(), headW = new THREE.Vector3();
+  let prevYaw = 0, prevNeckY = 0;
   const state = { root, head, neck, tag, eyes, udder, teats };
 
-  state.update = (dt, opts = {}) => {
-    if (first) { graze = opts.graze ?? 0; lie = opts.lie ?? 0; first = false; } // start in pose
+  state.update = (dt, o = {}) => {
+    if (dt <= 0) return;
+    if (first) { graze = o.graze ?? 0; lie = o.lie ?? 0; prevPos.copy(root.position); prevYaw = root.rotation.y; first = false; }
     t += dt;
-    graze += ((opts.graze ?? 0) - graze) * Math.min(1, dt * 2.5);
-    walk += ((opts.walk ?? 0) - walk) * Math.min(1, dt * 4);
-    lie += ((opts.lie ?? 0) - lie) * Math.min(1, dt * 1.6);
-    const look = opts.look ?? 0;
 
-    // head: down to the grass when grazing, curious tilt otherwise
-    const chew = Math.sin(t * 10) * 0.04 * graze;
-    neck.rotation.z = THREE.MathUtils.lerp(0.05 + Math.sin(t * 0.8) * 0.04, -0.85, graze) + chew;
-    neck.rotation.y = (1 - graze) * (look * 0.5 + Math.sin(t * 0.6) * 0.12);
-    head.rotation.x = (1 - graze) * Math.sin(t * 0.9) * 0.1; // head tilt, the cute part
-    head.rotation.z = graze * 0.25;
+    /* locomotion from real movement: no foot sliding */
+    const speed = tmpV.copy(root.position).sub(prevPos).setY(0).length() / dt / root.scale.x;
+    const angVel = Math.abs(root.rotation.y - prevYaw) / dt;
+    prevPos.copy(root.position); prevYaw = root.rotation.y;
+    const moving = Math.min(1, Math.max(speed / 0.9, o.walk ?? 0, angVel * 0.6));
+    gait += (moving - gait) * Math.min(1, dt * 6);
+    phase += (speed * 3.3 + angVel * 2.2 + (o.walk ?? 0) * 4) * dt; // stride ~1.9 units per cycle
 
-    // blink
+    graze += ((o.graze ?? 0) * (1 - gait) - graze) * Math.min(1, dt * 2.2);
+    lie += ((o.lie ?? 0) - lie) * Math.min(1, dt * 1.4);
+
+    /* legs: diagonal pairs, knee folds on the forward swing, feet lift */
+    legs.forEach((l) => {
+      const p = phase + (l.i === 0 || l.i === 3 ? 0 : Math.PI);
+      const swing = Math.sin(p);
+      const lift = Math.max(0, Math.cos(p));
+      l.hip.rotation.z = swing * 0.42 * gait;
+      l.knee.rotation.z = (l.front ? 1 : -1) * lift * 0.55 * gait;
+      l.hip.position.y = 0.62 + lift * 0.05 * gait;
+      l.hip.scale.y = 1 - lie * 0.7;
+    });
+    // body bobs twice per stride and rolls with the weight; idle weight shift and breathing
+    const bob = Math.abs(Math.cos(phase)) * 0.045 * gait;
+    body.position.y = 0.95 + bob + Math.sin(t * 1.3) * 0.01 * (1 - gait);
+    body.rotation.x = Math.sin(phase) * 0.035 * gait + Math.sin(t * 0.37) * 0.018 * (1 - gait) * (1 - lie);
+    body.rotation.z = Math.cos(phase * 2) * 0.012 * gait;
+    belly.scale.y = 1 + Math.sin(t * 1.55) * 0.014;
+    belly.scale.z = 1.02 + Math.sin(t * 1.55) * 0.008;
+    posture.position.y = -lie * 0.38;
+
+    /* head: graze / look with springs; nods with the stride; a happy moo now and then */
+    mooT -= dt;
+    if (mooT < 0 && graze < 0.2 && lie < 0.5) { moo = 1; mooT = 12 + rnd() * 12; }
+    moo = Math.max(0, moo - dt * 0.55);
+    const mooK = Math.sin(Math.min(1, moo) * Math.PI); // 0 → 1 → 0
+    shakeT -= dt;
+    if (shakeT < 0 && gait < 0.2) { shake = 1; shakeT = 10 + rnd() * 12; }
+    shake = Math.max(0, shake - dt * 1.4);
+
+    let lookYaw = (o.look ?? 0) * 0.6, lookPitch = 0;
+    if (o.lookAt) { // world-space target (the camera, the pointer)
+      head.getWorldPosition(headW);
+      tmpV.copy(o.lookAt);
+      root.worldToLocal(tmpV);
+      const lx = tmpV.x - 1.0, lz = tmpV.z, ly = tmpV.y - 1.4;
+      lookYaw = THREE.MathUtils.clamp(Math.atan2(-lz, lx), -0.75, 0.75);
+      lookPitch = THREE.MathUtils.clamp(Math.atan2(ly, Math.hypot(lx, lz)), -0.35, 0.4);
+    }
+    const yaw = yawS.step((1 - graze) * (lookYaw + Math.sin(t * 0.5) * 0.08) + Math.sin(shake * 18) * 0.12 * shake, dt);
+    const pitch = pitchS.step(lookPitch * (1 - graze), dt);
+    const nibble = graze * (Math.max(0, Math.sin(t * 2.3)) ** 6) * 0.12; // little tugs at the grass
+    neck.rotation.z = THREE.MathUtils.lerp(0.06 + pitch * 0.6, -0.85, graze) + nibble + mooK * 0.32 + Math.cos(phase * 2) * 0.05 * gait;
+    neck.rotation.y = yaw;
+    head.rotation.x = (1 - graze) * (Math.sin(t * 0.8) * 0.08) + headTossS.step(mooK * 0.1, dt);
+    head.rotation.z = graze * 0.25 + pitch * 0.3;
+
+    // chewing the cud: the mouth works, a bit faster when grazing
+    const chew = Math.sin(t * (graze > 0.5 ? 9 : 4.5));
+    mouth.position.y = -0.27 - (chew * 0.5 + 0.5) * 0.018 * (0.4 + graze) - mooK * 0.03;
+    mouth.scale.set(1, 1 + mooK * 0.6, 1 + mooK * 0.25);
+    snout.position.y = -0.17 - (chew * 0.5 + 0.5) * 0.006;
+
+    // eyes: blink with a soft ease; glance toward the look target; squint while mooing
     blinkT -= dt;
     let lid = 1;
-    if (blinkT < 0.12) lid = Math.abs(blinkT - 0.06) / 0.06;
-    if (blinkT < 0) blinkT = 2.5 + Math.random() * 3;
-    eyes.forEach((e) => { e.scale.y = Math.max(0.08, lid); });
-
-    // ears flick, tail swish, bell sways
-    ears[0].rotation.x = -0.35 - Math.max(0, Math.sin(t * 1.7 + 1)) ** 14 * 0.6;
-    ears[1].rotation.x = 0.35 + Math.max(0, Math.sin(t * 1.3)) ** 14 * 0.6;
-    tail.rotation.x = Math.sin(t * 2.2) * 0.4;
-    bell.rotation.x = Math.sin(t * 3.1) * 0.25 * (0.3 + walk);
-
-    // walk cycle with a happy bounce
-    const ph = t * 7;
-    legs.forEach((l, i) => {
-      l.rotation.z = Math.sin(ph + (i === 0 || i === 3 ? 0 : Math.PI)) * 0.45 * walk;
-      l.scale.y = 1 - lie * 0.7; // tucked under when lying
+    if (blinkT < 0.14) lid = Math.abs(blinkT - 0.07) / 0.07;
+    if (blinkT < 0) blinkT = 2 + rnd() * 3.5 + (rnd() < 0.2 ? -1.7 : 0); // sometimes a double blink
+    lid = Math.min(lid, 1 - mooK * 0.45);
+    eyes.forEach((e) => {
+      e.scale.y = Math.max(0.08, lid * lid * (3 - 2 * lid));
+      e.position.x = THREE.MathUtils.clamp(yaw - neck.rotation.y + lookYaw * 0.25, -0.2, 0.2) * 0.04;
+      e.position.y = pitch * 0.03;
     });
-    posture.position.y = -lie * 0.38;
-    body.position.y = 0.95 + Math.abs(Math.sin(ph)) * 0.05 * walk + Math.sin(t * 1.4) * 0.012 * (1 - walk);
-    body.rotation.z = Math.sin(ph) * 0.03 * walk;
-    // breathing
-    belly.scale.y = 1 + Math.sin(t * 1.6) * 0.012;
+
+    /* secondary motion: ears flop with head motion + random flicks; bell swings; tail swats */
+    const neckVel = (neck.rotation.y - prevNeckY) / dt;
+    prevNeckY = neck.rotation.y;
+    ears.forEach((e, k) => {
+      const flick = Math.max(0, Math.sin(t * (1.3 + k * 0.4) + k * 2)) ** 18 * 0.7;
+      const flop = e.sp.step(-neckVel * 0.05 * e.s + bob * 2.5 + mooK * 0.2, dt);
+      e.g.rotation.x = e.s * (-0.35 - flick - flop * 0.6);
+      e.g.rotation.z = flop * 0.4;
+    });
+    if (hero) {
+      bell.rotation.x = bellS.step(-neckVel * 0.04 + Math.sin(phase * 2) * 0.18 * gait, dt);
+      bell.rotation.z = bellZ.step(-(neck.rotation.z - 0.06) * 0.5, dt);
+    }
+    swatT -= dt;
+    if (swatT < 0) { swat = 1; swatT = 2.5 + rnd() * 5; }
+    swat = Math.max(0, swat - dt * 1.6);
+    const swatK = Math.sin(swat * Math.PI);
+    tailLinks.forEach((l, k) => {
+      const tx = (Math.sin(t * 1.6 + k * 0.6) * 0.18 + swatK * (k === 0 ? 0.9 : 0.35)) * (1 - lie * 0.7) + Math.sin(phase) * 0.15 * gait;
+      const tz = -bob * 2 * (k + 1) + swatK * 0.2;
+      l.g.rotation.x = l.sx.step(tx, dt);
+      l.g.rotation.z = l.sz.step(tz, dt);
+    });
   };
   return state;
 }

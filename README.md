@@ -15,7 +15,7 @@ Then open http://localhost:5190. The 3D modules need a server; opening the files
 | Page | What it shows |
 |---|---|
 | `index.html` | Home: cute 3D cow on her meadow (looks at you, grazes, follows the pointer), +19/+27/+25, the journey in 6 steps, products, testimonials, shipping |
-| `storia.html` | **Scroll-driven 3D story**: meadow with the herd → breakfast → the barn with the herd (sensor, feed rail, straw) → a colourful milking parlour → packaging line → the cartons on a farmhouse table; then history and the soil–animal–human balance |
+| `storia.html` | **Scroll-driven 3D story**: an aerial view of the little world swoops down to the meadow → breakfast → our cow walks a real path to the barn, where the herd eats through a feed fence (sensor, straw, drifting dust) → wider milking stalls → packaging line → at the table the carton lifts and pours a glass of milk; then history and the soil, animal and people cycle |
 | `negozio.html` | Shop: rotatable 3D carton, stepped case-price ladder, **Acquista ora** (express checkout) and Aggiungi al carrello, cart drawer, checkout that creates a real (local) order |
 | `blog.html` / `articolo.html?a=…` | Blog: the 20 posts from erbalatte.it/news rewritten, with categories, filters, sources, YouTube embed, share, reading progress |
 | `registrati.html` / `accedi.html` / `account.html` | Registration (private or business: P.IVA, SDI/PEC; shipping address; consents), login, account with order history and shipment tracking |
@@ -26,7 +26,7 @@ Everything is stored in the browser's localStorage, so it can be demoed end to e
 
 ## Design direction (v2)
 
-Clean and white, in the spirit of the original erbalatte.it, refined. v3 adds a herd of the cute toon cows (`buildCow` in `cow.js`; a more realistic `buildRealCow` is kept there but unused), smooth scrolling (Lenis, desktop) and soft cross-page transitions. The brand greens are #509A48 leaf, #8FBC8B sage and #BADDB6 mint, with #3F8438 used for accessible text. Type is Poppins: light headlines with semibold green emphasis. Buttons are pills and cards are soft. Drifting leaves echo the original bottle illustration. Carton red is used only for the semi-skimmed milk. The wow comes from the motion: a toon-shaded cute cow (`assets/js/cow.js`), the hero scene (`hero3d.js`) and the story (`story3d.js`).
+Clean and white, in the spirit of the original erbalatte.it, refined. v3 adds a herd of the cute toon cows (rim-lit, with springy ears and tail, knees, eye tracking, chewing and blinking) (`buildCow` in `cow.js`; a more realistic `buildRealCow` is kept there but unused), smooth scrolling (Lenis, desktop) and soft cross-page transitions. The brand greens are #509A48 leaf, #8FBC8B sage and #BADDB6 mint, with #3F8438 used for accessible text. Type is Poppins: light headlines with semibold green emphasis. Buttons are pills and cards are soft. Drifting leaves echo the original bottle illustration. Carton red is used only for the semi-skimmed milk. The wow comes from the motion: a toon-shaded cute cow (`assets/js/cow.js`), the hero scene (`hero3d.js`) and the story (`story3d.js`).
 
 The first, dark "enamel sign" version is archived in `.impeccable/v1/`.
 

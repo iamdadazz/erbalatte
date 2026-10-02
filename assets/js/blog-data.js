@@ -22,7 +22,7 @@ export const POSTS = [
       <p>Il <strong>Programma di Sviluppo Rurale Piemonte 2023-2027</strong> è lo strumento con cui Unione Europea, Stato e Regione Piemonte sostengono le aziende agricole del territorio: investimenti, innovazione e pratiche più sostenibili.</p>
       <p>Come per il programma precedente, pubblichiamo qui le informazioni sui progetti della nostra azienda finanziati dal PSR.</p>
       <p class="note">Dettagli del progetto da inserire: descrizione, spesa ammessa e contributo.</p>`,
-    sources: [{ label: 'Sviluppo rurale – Regione Piemonte', url: 'https://www.regione.piemonte.it/svilupporurale' }],
+    sources: [{ label: 'Sviluppo rurale, Regione Piemonte', url: 'https://www.regione.piemonte.it/svilupporurale' }],
   },
   {
     slug: 'podcast-microbiota-intestinale',

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blog · Erbalatte</title>
+<title>Blog | Erbalatte</title>
 <meta name="description" content="Notizie dalla Corte, il blog di Erbalatte.">
 <meta name="theme-color" content="#509A48">
 <link rel="icon" href="assets/img/erbalatte.png">
@@ -53,7 +53,7 @@
   const p = bySlug(slug) || [...POSTS].sort((a, b) => b.date.localeCompare(a.date))[0];
   const ext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 5h5v5M19 5l-8 8M10 6H6a1 1 0 00-1 1v11a1 1 0 001 1h11a1 1 0 001-1v-4"/></svg>';
 
-  document.title = `${p.title} · Erbalatte`;
+  document.title = `${p.title} | Erbalatte`;
   document.querySelector('meta[name="description"]').content = p.excerpt;
   document.querySelector('[data-meta]').innerHTML = `<div class="meta"><span class="cat">${CATEGORIES[p.cat]}</span><time datetime="${p.date}">${fmtDate(p.date)}</time><span>${p.read} min di lettura</span></div>`;
   document.querySelector('[data-title]').textContent = p.title;
